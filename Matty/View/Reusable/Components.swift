@@ -145,3 +145,17 @@ extension AnyTransition {
         )
     }
 }
+
+struct CloseButton: View {
+    
+    var action: () -> ()
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Image(systemName: "xmark")
+                .foregroundColor(.black)
+        }
+    }
+}

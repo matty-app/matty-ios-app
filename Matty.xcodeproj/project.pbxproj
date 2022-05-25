@@ -32,6 +32,9 @@
 		F58B749528397A3400C90B6E /* MattyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58B749428397A3400C90B6E /* MattyApp.swift */; };
 		F58B749928397A3400C90B6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749828397A3400C90B6E /* Assets.xcassets */; };
 		F58B749C28397A3400C90B6E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749B28397A3400C90B6E /* Preview Assets.xcassets */; };
+		F5EC7CE6283E7A2F0094E5D8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5EC7CE5283E7A2F0094E5D8 /* SearchView.swift */; };
+		F5EC7CE8283E861C0094E5D8 /* EventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5EC7CE7283E861C0094E5D8 /* EventsView.swift */; };
+		F5EC7CEA283E87B10094E5D8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5EC7CE9283E87B10094E5D8 /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,9 @@
 		F58B749428397A3400C90B6E /* MattyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MattyApp.swift; sourceTree = "<group>"; };
 		F58B749828397A3400C90B6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F58B749B28397A3400C90B6E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F5EC7CE5283E7A2F0094E5D8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		F5EC7CE7283E861C0094E5D8 /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
+		F5EC7CE9283E87B10094E5D8 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +96,9 @@
 				F506976928397D3700114C2E /* Auth */,
 				F506977428397D9A00114C2E /* NewEvent */,
 				F506977D28397E0300114C2E /* Reusable */,
+				F5EC7CE5283E7A2F0094E5D8 /* SearchView.swift */,
+				F5EC7CE7283E861C0094E5D8 /* EventsView.swift */,
+				F5EC7CE9283E87B10094E5D8 /* ProfileView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -272,6 +281,7 @@
 			files = (
 				F506977128397D7D00114C2E /* EmailCheckView.swift in Sources */,
 				F506978128397E3300114C2E /* InterestCollection.swift in Sources */,
+				F5EC7CE8283E861C0094E5D8 /* EventsView.swift in Sources */,
 				F506976528397D0000114C2E /* Interest.swift in Sources */,
 				F506977828397DD500114C2E /* NewEventInterestSelectionView.swift in Sources */,
 				F506978628397E6900114C2E /* EventFeed.swift in Sources */,
@@ -280,10 +290,12 @@
 				F506976F28397D6B00114C2E /* SignInView.swift in Sources */,
 				F506979028397F0600114C2E /* MapKitExtensions.swift in Sources */,
 				F506976B28397D4A00114C2E /* AuthView.swift in Sources */,
+				F5EC7CE6283E7A2F0094E5D8 /* SearchView.swift in Sources */,
 				F506978428397E5B00114C2E /* Auth.swift in Sources */,
 				F506978D28397ED400114C2E /* MapSearchService.swift in Sources */,
 				F506978828397E7500114C2E /* NewEvent.swift in Sources */,
 				F506977328397D9100114C2E /* UserInterestsSelectionView.swift in Sources */,
+				F5EC7CEA283E87B10094E5D8 /* ProfileView.swift in Sources */,
 				F506976328397CEF00114C2E /* FirebaseStore.swift in Sources */,
 				F58B749528397A3400C90B6E /* MattyApp.swift in Sources */,
 				F506977A28397DEB00114C2E /* NewEventLocationSelectionView.swift in Sources */,

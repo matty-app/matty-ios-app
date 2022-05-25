@@ -6,6 +6,8 @@ struct NewEventView: View {
     
     @StateObject var newEvent = NewEvent()
     
+    var completionHandler: () -> ()
+    
     var body: some View {
         Form {
             Section("Name") {
@@ -35,8 +37,7 @@ struct NewEventView: View {
                 Toggle("Public", isOn: $newEvent.isPublic)
                 Toggle("Approval", isOn: $newEvent.approvalRequired)
             }
-            FormActionButton("Submit", action: dismissView)
-            
+            FormActionButton("Submit", action: completionHandler)
         }
         .navigationTitle("New Event")
         .navigationBarTitleDisplayMode(.inline)
@@ -57,10 +58,6 @@ struct NewEventView: View {
             }
         }
     }
-    
-    private func dismissView() {
-        presentationMode.wrappedValue.dismiss()
-    }
 }
 
 struct NewEventView_Preview: PreviewProvider {
@@ -68,7 +65,7 @@ struct NewEventView_Preview: PreviewProvider {
     static var previews: some View {
         NavigationView {
             let newEvent = NewEvent(dataStore: StubDataStore())
-            NewEventView(newEvent: newEvent)
+            NewEventView(newEvent: newEvent) { }
         }
     }
 }

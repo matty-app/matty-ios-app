@@ -6,7 +6,7 @@ import FirebaseFirestore
 struct MattyApp: App {
     
     @StateObject var auth = Auth()
-    @StateObject var events = EventFeed()
+    @StateObject var eventFeed = EventFeed()
     
     init() {
         FirebaseApp.configure()
@@ -14,8 +14,9 @@ struct MattyApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if auth.completed {
-                EventFeedView(eventFeed: events)
+            if !auth.completed {
+                EventFeedView()
+                    .environmentObject(eventFeed)
             } else {
                 AuthView()
                     .environmentObject(auth)
