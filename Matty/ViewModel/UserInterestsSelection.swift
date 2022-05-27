@@ -2,7 +2,7 @@ import Foundation
 
 class UserInterestsSelection: ObservableObject {
     
-    @Published var interests = [Interest]()
+    @Published var interests = [SelectableInterest]()
     
     var noInterests: Bool {
         return interests.isEmpty
@@ -10,7 +10,7 @@ class UserInterestsSelection: ObservableObject {
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         dataStore.fetchAllInterests { interests in
-            self.interests = interests
+            self.interests = interests.map { SelectableInterest(value: $0) }
         }
     }
 }

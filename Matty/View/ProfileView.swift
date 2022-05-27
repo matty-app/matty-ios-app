@@ -2,7 +2,9 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @State var editing = false
+    @ObservedObject var profile: Profile
+    
+    @State private var editing = false
     
     var body: some View {
         NavigationView {
@@ -26,16 +28,14 @@ struct ProfileView: View {
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if editing {
-                    Button("Cancel", role: .destructive) {
-                        editing = false
-                    }
-                } else {
-                    Button("Edit") {
-                        editing = true
-                    }
-                }
+                EditButton()
             }
+        }
+    }
+    
+    func EditButton() -> some View {
+        Button(editing ? "Cancel" : "Edit") {
+            editing.toggle()
         }
     }
     
@@ -65,13 +65,16 @@ struct ProfileView: View {
     
     func Interests() -> some View {
         Section("Interests") {
-            EmptyView()
+            InterestCollection(interests: $profile.userInterests)
+                .padding(.top, 5)
+                .disabled(true)
         }
     }
 }
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        let profile = Profile(dataStore: StubDataStore())
+        ProfileView(profile: profile)
     }
 }

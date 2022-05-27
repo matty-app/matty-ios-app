@@ -6,6 +6,7 @@ class InterestCell: UICollectionViewCell {
     lazy private var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -28,12 +29,9 @@ class InterestCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup(text: String) {
+    func setup(text: String, selected: Bool) {
         label.text = text
-    }
-    
-    func toggleSelected() {
-        if isSelected {
+        if selected {
             backgroundColor = .blue
             layer.borderWidth = 0
             label.textColor = .white
@@ -45,11 +43,20 @@ class InterestCell: UICollectionViewCell {
             label.font = label.font.withWeight(.light)
         }
     }
+    
+    func setup(with interest: SelectableInterest) {
+        setup(text: interest.value.name, selected: interest.selected)
+    }
+}
+
+struct SelectableInterest {
+    var selected = false
+    let value: Interest
 }
 
 struct InterestCollection: UIViewRepresentable {
     
-    @Binding var interests: [Interest]
+    @Binding var interests: [SelectableInterest]
     
     func makeUIView(context: Context) -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
@@ -73,9 +80,9 @@ struct InterestCollection: UIViewRepresentable {
     
     class Coordinator: NSObject {
         
-        @Binding private var interests: [Interest]
+        @Binding private var interests: [SelectableInterest]
         
-        init(interests: Binding<[Interest]>) {
+        init(interests: Binding<[SelectableInterest]>) {
             self._interests = interests
             super.init()
         }
@@ -90,7 +97,7 @@ extension InterestCollection.Coordinator: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: InterestCell.id, for: indexPath) as! InterestCell
-        cell.setup(text: interests[indexPath.row].name)
+        cell.setup(with: interests[indexPath.row])
         return cell
     }
 }
@@ -98,16 +105,10 @@ extension InterestCollection.Coordinator: UICollectionViewDataSource {
 extension InterestCollection.Coordinator: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! InterestCell
-        cell.toggleSelected()
+        $interests[indexPath.row].selected.wrappedValue.toggle()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! InterestCell
-        cell.toggleSelected()
+        $interests[indexPath.row].selected.wrappedValue.toggle()
     }
-}
-
-extension InterestCollection.Coordinator: UICollectionViewDelegateFlowLayout {
-    
 }

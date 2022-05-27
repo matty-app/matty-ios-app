@@ -40,10 +40,12 @@ struct EventFeedView: View {
     }
     
     func ProfileTabView() -> some View {
-        ProfileView()
-            .tabItem {
-                Label("Profile", systemImage: "person.crop.circle")
-            }.tag(2)
+        let profile = Profile(dataStore: FirebaseStore.shared)
+        return
+            ProfileView(profile: profile)
+                .tabItem {
+                    Label("Profile", systemImage: "person.crop.circle")
+                }.tag(2)
     }
     
     func hideNewEventScreen() {

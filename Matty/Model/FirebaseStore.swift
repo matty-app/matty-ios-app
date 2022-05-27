@@ -2,6 +2,7 @@ import Foundation
 import FirebaseFirestore
 
 protocol AnyDataStore {
+    func fetchUserInterests(completionHandler: @escaping ([Interest]) -> ())
     func fetchAllInterests(completionHandler: @escaping ([Interest]) -> ())
 }
 
@@ -12,6 +13,10 @@ class FirebaseStore: AnyDataStore {
     private let firestore = Firestore.firestore()
     
     private init() { }
+    
+    func fetchUserInterests(completionHandler: @escaping ([Interest]) -> ()) {
+        StubDataStore().fetchUserInterests(completionHandler: completionHandler)
+    }
     
     func fetchAllInterests(completionHandler: @escaping ([Interest]) -> ()) {
         firestore.collection(.interests).getDocuments { querySnapshot, error in
@@ -34,8 +39,13 @@ class FirebaseStore: AnyDataStore {
 
 class StubDataStore: AnyDataStore {
     
+    let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toInterests()
+    
+    func fetchUserInterests(completionHandler: @escaping ([Interest]) -> ()) {
+        completionHandler(Array(interests.prefix(4)))
+    }
+    
     func fetchAllInterests(completionHandler: @escaping ([Interest]) -> ()) {
-        let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toInterests()
         completionHandler(interests)
     }
 }
