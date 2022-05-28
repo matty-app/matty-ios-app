@@ -159,3 +159,16 @@ struct CloseButton: View {
         }
     }
 }
+
+struct CancelButton: View {
+    
+    var action: () -> ()
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Text("Cancel")
+        }
+    }
+}

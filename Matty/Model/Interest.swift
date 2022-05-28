@@ -1,5 +1,5 @@
 import Foundation
 
-struct Interest {
+struct Interest: Equatable {
     let name: String
 }

@@ -4,8 +4,6 @@ struct ProfileView: View {
     
     @ObservedObject var profile: Profile
     
-    @State private var editing = false
-    
     var body: some View {
         NavigationView {
             VStack {
@@ -19,12 +17,19 @@ struct ProfileView: View {
                     .padding(.vertical, 5)
                 Interests()
                 Spacer()
-                if editing {
+                if profile.editing {
                     ActionButton("Save") {
-                        // TODO:
+                        profile.save()
                     }
                 }
             }
+            .sheet(isPresented: $profile.showInterestsScreen, onDismiss: {
+                profile.revertAllInterests()
+            }, content: {
+                EditInterests(interests: $profile.allInterests) {
+                    profile.saveInterests()
+                }
+            })
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -34,23 +39,35 @@ struct ProfileView: View {
     }
     
     func EditButton() -> some View {
-        Button(editing ? "Cancel" : "Edit") {
-            editing.toggle()
+        Button(profile.editing ? "Cancel" : "Edit") {
+            profile.toggleEditing()
         }
     }
     
-    func Section<V: View>(_ name: String, @ViewBuilder content: () -> V) -> some View {
+    func Title(_ text: String) -> some View {
+        Text(text)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .font(.headline)
+    }
+    
+    func Section<C: View, L: View>(@ViewBuilder content: () -> C, @ViewBuilder label: () -> L) -> some View {
         VStack(spacing: 0) {
-            Text(name)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.headline)
+            label()
             content()
         }.padding(.horizontal)
     }
     
+    func Section<V: View>(_ name: String, @ViewBuilder content: () -> V) -> some View {
+        Section {
+            content()
+        } label: {
+            Title(name)
+        }
+    }
+    
     func Field(name: String, value: String) -> some View {
         return Section(name) {
-            if editing {
+            if profile.editing {
                 TextField(name, text: .constant(value))
                     .padding(10)
                     .background(.regularMaterial)
@@ -64,11 +81,58 @@ struct ProfileView: View {
     }
     
     func Interests() -> some View {
-        Section("Interests") {
+        Section {
             InterestCollection(interests: $profile.userInterests)
                 .padding(.top, 5)
                 .disabled(true)
+        } label: {
+            HStack {
+                Title("Interests")
+                if profile.editing {
+                    Button {
+                        profile.editInterests()
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                            .font(.title)
+                            .foregroundColor(.accentColor)
+                    }
+                }
+            }
+            .padding(.bottom)
         }
+    }
+}
+
+struct EditInterests: View {
+    
+    @Environment(\.presentationMode) private var presentationMode
+    
+    @Binding var interests: [SelectableInterest]
+    
+    var completionHandler = {}
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Choose one or more")
+                    .foregroundColor(.gray)
+                InterestCollection(interests: $interests)
+                    .padding()
+                Spacer()
+                ActionButton("Save") {
+                    completionHandler()
+                }
+            }
+            .navigationTitle("Interests")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                CancelButton(action: dismissView)
+            }
+        }
+    }
+    
+    private func dismissView() {
+        presentationMode.wrappedValue.dismiss()
     }
 }
 

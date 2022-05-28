@@ -42,7 +42,7 @@ class StubDataStore: AnyDataStore {
     let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toInterests()
     
     func fetchUserInterests(completionHandler: @escaping ([Interest]) -> ()) {
-        completionHandler(Array(interests.prefix(4)))
+        completionHandler(Array(interests.prefix(5)))
     }
     
     func fetchAllInterests(completionHandler: @escaping ([Interest]) -> ()) {
