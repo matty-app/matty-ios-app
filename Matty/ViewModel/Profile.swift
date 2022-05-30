@@ -1,4 +1,5 @@
-import Foundation
+import SwiftUI
+import Photos
 
 class Profile: ObservableObject {
     
@@ -6,6 +7,9 @@ class Profile: ObservableObject {
     @Published var allInterests = [SelectableInterest]()
     @Published var editing = false
     @Published var showInterestsScreen = false
+    @Published var showImageActions = false
+    @Published var showImagePicker = false
+    @Published var image: UIImage?
     
     private let dataStore: AnyDataStore
     
@@ -27,6 +31,18 @@ class Profile: ObservableObject {
     
     func toggleEditing() {
         editing ? stopEditing() : startEditing()
+    }
+    
+    func onImageTap() {
+        showImageActions = true
+    }
+    
+    func removeImage() {
+        image = nil
+    }
+    
+    func chooseImage() {
+        self.showImagePicker = true
     }
     
     func editInterests() {

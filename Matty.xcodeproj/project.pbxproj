@@ -29,6 +29,7 @@
 		F506978D28397ED400114C2E /* MapSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978C28397ED400114C2E /* MapSearchService.swift */; };
 		F506979028397F0600114C2E /* MapKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978F28397F0600114C2E /* MapKitExtensions.swift */; };
 		F50697922839801D00114C2E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F50697912839801D00114C2E /* GoogleService-Info.plist */; };
+		F50B7E472844E64B00E52EB8 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50B7E462844E64B00E52EB8 /* ImagePicker.swift */; };
 		F58B749528397A3400C90B6E /* MattyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58B749428397A3400C90B6E /* MattyApp.swift */; };
 		F58B749928397A3400C90B6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749828397A3400C90B6E /* Assets.xcassets */; };
 		F58B749C28397A3400C90B6E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749B28397A3400C90B6E /* Preview Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		F506978C28397ED400114C2E /* MapSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchService.swift; sourceTree = "<group>"; };
 		F506978F28397F0600114C2E /* MapKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapKitExtensions.swift; sourceTree = "<group>"; };
 		F50697912839801D00114C2E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F50B7E462844E64B00E52EB8 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		F58B749128397A3400C90B6E /* Matty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F58B749428397A3400C90B6E /* MattyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MattyApp.swift; sourceTree = "<group>"; };
 		F58B749828397A3400C90B6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			children = (
 				F506977E28397E2500114C2E /* Components.swift */,
 				F506978028397E3300114C2E /* InterestCollection.swift */,
+				F50B7E462844E64B00E52EB8 /* ImagePicker.swift */,
 			);
 			path = Reusable;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				F506976B28397D4A00114C2E /* AuthView.swift in Sources */,
 				F5EC7CE6283E7A2F0094E5D8 /* SearchView.swift in Sources */,
 				F506978428397E5B00114C2E /* Auth.swift in Sources */,
+				F50B7E472844E64B00E52EB8 /* ImagePicker.swift in Sources */,
 				F506978D28397ED400114C2E /* MapSearchService.swift in Sources */,
 				F506978828397E7500114C2E /* NewEvent.swift in Sources */,
 				F506977328397D9100114C2E /* UserInterestsSelectionView.swift in Sources */,

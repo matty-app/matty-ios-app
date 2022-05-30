@@ -7,9 +7,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Image(systemName: "person.crop.circle.fill")
-                    .font(.system(size: 100))
-                    .foregroundColor(.gray)
+                ProfileImage()
                 Field(name: "Name", value: "Mark Z")
                 Field(name: "Email", value: "mark@fb.com")
                     .padding(.vertical, 5)
@@ -22,6 +20,10 @@ struct ProfileView: View {
                         profile.save()
                     }
                 }
+            }
+            .actionSheet(isPresented: $profile.showImageActions, content: ImageActions)
+            .sheet(isPresented: $profile.showImagePicker) {
+                ImagePicker(image: $profile.image)
             }
             .sheet(isPresented: $profile.showInterestsScreen, onDismiss: {
                 profile.revertAllInterests()
@@ -36,6 +38,22 @@ struct ProfileView: View {
                 EditButton()
             }
         }
+    }
+    
+    func ProfileImage() -> some View {
+        var imageView: Image
+        if let image = profile.image {
+            imageView = Image(uiImage: image)
+        } else {
+            imageView = Image(systemName: "person.crop.circle.fill")
+        }
+        return imageView
+            .resizable()
+            .font(.system(size: 100))
+            .foregroundColor(.gray)
+            .frame(width: 100, height: 100)
+            .clipShape(Circle())
+            .onTapGesture(perform: profile.onImageTap)
     }
     
     func EditButton() -> some View {
@@ -100,6 +118,20 @@ struct ProfileView: View {
             }
             .padding(.bottom)
         }
+    }
+    
+    func ImageActions() -> ActionSheet {
+        ActionSheet(title: Text("Edit your profile image"), buttons: [
+            .cancel(),
+            .destructive(
+                Text("Remove"),
+                action: profile.removeImage
+            ),
+            .default(
+                Text("Choose from Library"),
+                action: profile.chooseImage
+            )
+        ])
     }
 }
 
