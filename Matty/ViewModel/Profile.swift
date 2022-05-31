@@ -9,9 +9,16 @@ class Profile: ObservableObject {
     @Published var showInterestsScreen = false
     @Published var showImageActions = false
     @Published var showImagePicker = false
-    @Published var image: UIImage?
+    @Published var showImageFullscreen = false
+    @Published var image: UIImage? {
+        didSet { saveImage() }
+    }
     
     private let dataStore: AnyDataStore
+    private let imageUrl: URL = {
+        FileManager.default.documentDirectory
+            .appendingPathComponent("profileImage.jpeg")
+    }()
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
@@ -19,6 +26,7 @@ class Profile: ObservableObject {
             self.userInterests = interests.map { SelectableInterest(selected: true, value: $0) }
             self.loadAllInterests()
         }
+        loadImage()
     }
     
     func startEditing() {
@@ -34,7 +42,17 @@ class Profile: ObservableObject {
     }
     
     func onImageTap() {
-        showImageActions = true
+        if editing {
+            showImageActions = true
+        } else {
+            if image != nil {
+                showImageFullscreen = true
+            }
+        }
+    }
+    
+    func closeImage() {
+        showImageFullscreen = false
     }
     
     func removeImage() {
@@ -83,11 +101,50 @@ class Profile: ObservableObject {
             }
         }
     }
+    
+    private func loadImage() {
+        image = imageUrl.loadImage()
+    }
+    
+    private func saveImage() {
+        if let image = image {
+            image.save(to: imageUrl)
+        } else {
+            try? FileManager.default.removeItem(at: imageUrl)
+        }
+    }
 }
 
 extension Array where Element == SelectableInterest {
     
     func extractValues() -> [Interest] {
         return map { $0.value }
+    }
+}
+
+extension URL {
+    
+    func loadImage() -> UIImage? {
+        if let data = try? Data(contentsOf: self), let image = UIImage(data: data) {
+            return image
+        } else {
+            return nil
+        }
+    }
+}
+
+extension UIImage {
+    
+    func save(to url: URL) {
+        if let data = jpegData(compressionQuality: 1.0) {
+            try? data.write(to: url)
+        }
+    }
+}
+
+extension FileManager {
+    
+    var documentDirectory: URL {
+        return urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }

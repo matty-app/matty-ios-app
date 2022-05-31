@@ -5,37 +5,42 @@ struct ProfileView: View {
     @ObservedObject var profile: Profile
     
     var body: some View {
-        NavigationView {
-            VStack {
-                ProfileImage()
-                Field(name: "Name", value: "Mark Z")
-                Field(name: "Email", value: "mark@fb.com")
-                    .padding(.vertical, 5)
-                Field(name: "About Me", value: "Swift Junior Helper")
-                    .padding(.vertical, 5)
-                Interests()
-                Spacer()
-                if profile.editing {
-                    ActionButton("Save") {
-                        profile.save()
+        ZStack {
+            NavigationView {
+                VStack {
+                    ProfileImage()
+                    Field(name: "Name", value: "Mark Z")
+                    Field(name: "Email", value: "mark@fb.com")
+                        .padding(.vertical, 5)
+                    Field(name: "About Me", value: "Swift Junior Helper")
+                        .padding(.vertical, 5)
+                    Interests()
+                    Spacer()
+                    if profile.editing {
+                        ActionButton("Save") {
+                            profile.save()
+                        }
                     }
                 }
-            }
-            .actionSheet(isPresented: $profile.showImageActions, content: ImageActions)
-            .sheet(isPresented: $profile.showImagePicker) {
-                ImagePicker(image: $profile.image)
-            }
-            .sheet(isPresented: $profile.showInterestsScreen, onDismiss: {
-                profile.revertAllInterests()
-            }, content: {
-                EditInterests(interests: $profile.allInterests) {
-                    profile.saveInterests()
+                .actionSheet(isPresented: $profile.showImageActions, content: ImageActions)
+                .sheet(isPresented: $profile.showImagePicker) {
+                    ImagePicker(image: $profile.image)
                 }
-            })
-            .navigationTitle("Profile")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                EditButton()
+                .sheet(isPresented: $profile.showInterestsScreen, onDismiss: {
+                    profile.revertAllInterests()
+                }, content: {
+                    EditInterests(interests: $profile.allInterests) {
+                        profile.saveInterests()
+                    }
+                })
+                .navigationTitle("Profile")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    EditButton()
+                }
+            }
+            if profile.showImageFullscreen {
+                ProfileImageFullscreen()
             }
         }
     }
@@ -52,8 +57,30 @@ struct ProfileView: View {
             .font(.system(size: 100))
             .foregroundColor(.gray)
             .frame(width: 100, height: 100)
+            .overlay {
+                if profile.editing {
+                    ZStack {
+                        Color.black
+                            .opacity(0.3)
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(.white)
+                    }
+                }
+            }
             .clipShape(Circle())
             .onTapGesture(perform: profile.onImageTap)
+    }
+    
+    func ProfileImageFullscreen() -> some View {
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
+                .opacity(0.9)
+            Image(uiImage: profile.image!)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }.onTapGesture(perform: profile.closeImage)
     }
     
     func EditButton() -> some View {
