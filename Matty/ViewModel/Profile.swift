@@ -17,6 +17,14 @@ class Profile: ObservableObject {
         didSet { saveImage() }
     }
     
+    var hasImage: Bool {
+        return image != nil
+    }
+    
+    var isValid: Bool {
+        return !name.isEmpty
+    }
+    
     private var nameOld = ""
     private var emailOld = ""
     private var aboutOld = ""

@@ -55,10 +55,12 @@ struct InputField: View {
 struct ActionButton: View {
     
     private let title: String
+    private let disabled: Bool
     private let action: () -> Void
     
-    init(_ title: String, action: @escaping () -> Void) {
+    init(_ title: String, disabled: Bool = false, action: @escaping () -> Void) {
         self.title = title
+        self.disabled = disabled
         self.action = action
     }
     
@@ -72,6 +74,8 @@ struct ActionButton: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding()
         }
+        .disabled(disabled)
+        .opacity(disabled ? 0.5 : 1)
     }
 }
 

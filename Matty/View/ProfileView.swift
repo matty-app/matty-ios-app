@@ -17,7 +17,7 @@ struct ProfileView: View {
                     Interests()
                     Spacer()
                     if profile.editing {
-                        ActionButton("Save") {
+                        ActionButton("Save", disabled: !profile.isValid) {
                             profile.save()
                         }
                     }
@@ -52,24 +52,25 @@ struct ProfileView: View {
         } else {
             imageView = Image(systemName: "person.crop.circle.fill")
         }
-        return imageView
-            .resizable()
-            .font(.system(size: 100))
-            .foregroundColor(.gray)
-            .frame(width: 100, height: 100)
-            .overlay {
-                if profile.editing {
-                    ZStack {
-                        Color.black
-                            .opacity(0.3)
-                        Image(systemName: "camera.fill")
-                            .font(.system(size: 30))
-                            .foregroundColor(.white)
+        return Button(action: profile.onImageTap) {
+            imageView
+                .resizable()
+                .font(.system(size: 100))
+                .foregroundColor(.gray)
+                .frame(width: 100, height: 100)
+                .overlay {
+                    if profile.editing {
+                        ZStack {
+                            Color.black
+                                .opacity(0.3)
+                            Image(systemName: "camera.fill")
+                                .font(.system(size: 30))
+                                .foregroundColor(.white)
+                        }
                     }
                 }
-            }
-            .clipShape(Circle())
-            .onTapGesture(perform: profile.onImageTap)
+                .clipShape(Circle())
+        }
     }
     
     func ProfileImageFullscreen() -> some View {
@@ -148,17 +149,20 @@ struct ProfileView: View {
     }
     
     func ImageActions() -> ActionSheet {
-        ActionSheet(title: Text("Edit your profile image"), buttons: [
-            .cancel(),
-            .destructive(
+        var buttons = [ActionSheet.Button]()
+        if profile.hasImage {
+            buttons.append(.destructive(
                 Text("Remove"),
                 action: profile.removeImage
-            ),
-            .default(
-                Text("Choose from Library"),
-                action: profile.chooseImage
-            )
-        ])
+            ))
+        }
+        buttons.append(.default(
+            Text("Choose from Library"),
+            action: profile.chooseImage
+        ))
+        buttons.append(.cancel())
+        
+        return ActionSheet(title: Text("Edit your profile image"), buttons: buttons)
     }
 }
 
