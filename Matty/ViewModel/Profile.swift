@@ -3,6 +3,9 @@ import Photos
 
 class Profile: ObservableObject {
     
+    @Published var name = "Mark Z"
+    @Published var email = "mark@fb.com"
+    @Published var about = "Swift Junior Helper"
     @Published var userInterests = [SelectableInterest]()
     @Published var allInterests = [SelectableInterest]()
     @Published var editing = false
@@ -13,6 +16,10 @@ class Profile: ObservableObject {
     @Published var image: UIImage? {
         didSet { saveImage() }
     }
+    
+    private var nameOld = ""
+    private var emailOld = ""
+    private var aboutOld = ""
     
     private let dataStore: AnyDataStore
     private let imageUrl: URL = {
@@ -30,6 +37,7 @@ class Profile: ObservableObject {
     }
     
     func startEditing() {
+        saveValues()
         editing = true
     }
     
@@ -37,8 +45,13 @@ class Profile: ObservableObject {
         editing = false
     }
     
+    func cancelEditing() {
+        restoreValues()
+        editing = false
+    }
+    
     func toggleEditing() {
-        editing ? stopEditing() : startEditing()
+        editing ? cancelEditing() : startEditing()
     }
     
     func onImageTap() {
@@ -112,6 +125,18 @@ class Profile: ObservableObject {
         } else {
             try? FileManager.default.removeItem(at: imageUrl)
         }
+    }
+    
+    private func saveValues() {
+        nameOld = name
+        emailOld = email
+        aboutOld = about
+    }
+    
+    private func restoreValues() {
+        name = nameOld
+        email = emailOld
+        about = aboutOld
     }
 }
 

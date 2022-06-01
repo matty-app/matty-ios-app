@@ -9,10 +9,10 @@ struct ProfileView: View {
             NavigationView {
                 VStack {
                     ProfileImage()
-                    Field(name: "Name", value: "Mark Z")
-                    Field(name: "Email", value: "mark@fb.com")
+                    Field(name: "Name", value: $profile.name)
+                    Field(name: "Email", value: $profile.email)
                         .padding(.vertical, 5)
-                    Field(name: "About Me", value: "Swift Junior Helper")
+                    Field(name: "About Me", value: $profile.about)
                         .padding(.vertical, 5)
                     Interests()
                     Spacer()
@@ -110,15 +110,15 @@ struct ProfileView: View {
         }
     }
     
-    func Field(name: String, value: String) -> some View {
+    func Field(name: String, value: Binding<String>) -> some View {
         return Section(name) {
             if profile.editing {
-                TextField(name, text: .constant(value))
+                TextField(name, text: value)
                     .padding(10)
                     .background(.regularMaterial)
                     .background(in: RoundedRectangle(cornerRadius: 10))
             } else {
-                Text(value)
+                Text(value.wrappedValue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.title3)
             }
