@@ -5,42 +5,40 @@ struct ProfileView: View {
     @ObservedObject var profile: Profile
     
     var body: some View {
-        ZStack {
-            NavigationView {
-                VStack {
-                    ProfileImage()
-                    Field(name: "Name", value: $profile.name)
-                    Field(name: "Email", value: $profile.email)
-                        .padding(.vertical, 5)
-                    Field(name: "About Me", value: $profile.about)
-                        .padding(.vertical, 5)
-                    Interests()
-                    Spacer()
-                    if profile.editing {
-                        ActionButton("Save", disabled: !profile.isValid) {
-                            profile.save()
-                        }
+        NavigationView {
+            VStack {
+                ProfileImage()
+                Field(name: "Name", value: $profile.name)
+                Field(name: "Email", value: $profile.email)
+                    .padding(.vertical, 5)
+                Field(name: "About Me", value: $profile.about)
+                    .padding(.vertical, 5)
+                Interests()
+                Spacer()
+                if profile.editing {
+                    ActionButton("Save", disabled: !profile.isValid) {
+                        profile.save()
                     }
-                }
-                .actionSheet(isPresented: $profile.showImageActions, content: ImageActions)
-                .sheet(isPresented: $profile.showImagePicker) {
-                    ImagePicker(image: $profile.image)
-                }
-                .sheet(isPresented: $profile.showInterestsScreen, onDismiss: {
-                    profile.revertAllInterests()
-                }, content: {
-                    EditInterests(interests: $profile.allInterests) {
-                        profile.saveInterests()
-                    }
-                })
-                .navigationTitle("Profile")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    EditButton()
                 }
             }
-            if profile.showImageFullscreen {
+            .fullScreenCover(isPresented: $profile.showImageFullscreen) {
                 ProfileImageFullscreen()
+            }
+            .actionSheet(isPresented: $profile.showImageActions, content: ImageActions)
+            .sheet(isPresented: $profile.showImagePicker) {
+                ImagePicker(image: $profile.image)
+            }
+            .sheet(isPresented: $profile.showInterestsScreen, onDismiss: {
+                profile.revertAllInterests()
+            }, content: {
+                EditInterests(interests: $profile.allInterests) {
+                    profile.saveInterests()
+                }
+            })
+            .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                EditButton()
             }
         }
     }
@@ -52,7 +50,12 @@ struct ProfileView: View {
         } else {
             imageView = Image(systemName: "person.crop.circle.fill")
         }
-        return Button(action: profile.onImageTap) {
+
+        return Button {
+            withInstantTransaction {
+                profile.onImageTap()
+            }
+        } label: {
             imageView
                 .resizable()
                 .font(.system(size: 100))
@@ -81,7 +84,11 @@ struct ProfileView: View {
             Image(uiImage: profile.image!)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-        }.onTapGesture(perform: profile.closeImage)
+        }.onTapGesture {
+            withInstantTransaction {
+                profile.closeImage()
+            }
+        }
     }
     
     func EditButton() -> some View {
@@ -196,6 +203,14 @@ struct EditInterests: View {
     
     private func dismissView() {
         presentationMode.wrappedValue.dismiss()
+    }
+}
+
+func withInstantTransaction(body: () -> ()) {
+    var transaction = Transaction()
+    transaction.disablesAnimations = true
+    withTransaction(transaction) {
+        body()
     }
 }
 
