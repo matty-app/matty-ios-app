@@ -37,8 +37,8 @@ class Profile: ObservableObject {
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
-        dataStore.fetchUserInterests { interests in
-            self.userInterests = interests.map { SelectableInterest(selected: true, value: $0) }
+        dataStore.fetchUserInterests { entities in
+            self.userInterests = entities.map { SelectableInterest(selected: true, value: $0.interest ) }
             self.loadAllInterests()
         }
         loadImage()
@@ -114,11 +114,11 @@ class Profile: ObservableObject {
     
     private func loadAllInterests() {
         allInterests = []
-        dataStore.fetchAllInterests { interests in
+        dataStore.fetchAllInterests { entities in
             let userInterests = self.userInterests.extractValues()
-            interests.forEach { interest in
-                let selected = userInterests.contains(interest)
-                self.allInterests.append(SelectableInterest(selected: selected, value: interest))
+            entities.forEach { entity in
+                let selected = userInterests.contains(entity.interest)
+                self.allInterests.append(SelectableInterest(selected: selected, value: entity.interest))
             }
         }
     }

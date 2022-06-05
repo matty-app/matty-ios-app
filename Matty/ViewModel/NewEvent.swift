@@ -16,6 +16,10 @@ class NewEvent: ObservableObject {
     @Published var eventAdded = false
     @Published var availableInterests = [Interest]()
     
+    var selectedInterest: Interest? {
+        availableInterests.first { $0.name == interest }
+    }
+    
     var datetime: String {
         return now ? "Now" : date.formatted()
     }
@@ -28,12 +32,30 @@ class NewEvent: ObservableObject {
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
-        dataStore.fetchAllInterests { interests in
-            self.availableInterests = interests
+        dataStore.fetchAllInterests { entities in
+            self.availableInterests = entities.map { $0.interest }
         }
     }
     
     func setInterest(_ interest: Interest) {
         self.interest = interest.name
+    }
+    
+    func submit() {
+        let event = toEvent()
+        dataStore.add(event)
+    }
+    
+    private func toEvent() -> Event {
+        return Event(
+            name: name,
+            description: description,
+            details: privateDetails,
+            interest: selectedInterest!,
+            location: locationCoordinate,
+            date: now ? nil : date,
+            isPublic: isPublic,
+            withApproval: approvalRequired
+        )
     }
 }

@@ -37,7 +37,10 @@ struct NewEventView: View {
                 Toggle("Public", isOn: $newEvent.isPublic)
                 Toggle("Approval", isOn: $newEvent.approvalRequired)
             }
-            FormActionButton("Submit", action: completionHandler)
+            FormActionButton("Submit") {
+                newEvent.submit()
+                completionHandler()
+            }
         }
         .navigationTitle("New Event")
         .navigationBarTitleDisplayMode(.inline)

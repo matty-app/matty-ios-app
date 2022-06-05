@@ -9,8 +9,8 @@ class UserInterestsSelection: ObservableObject {
     }
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
-        dataStore.fetchAllInterests { interests in
-            self.interests = interests.map { SelectableInterest(value: $0) }
+        dataStore.fetchAllInterests { entities in
+            self.interests = entities.map { SelectableInterest(value: $0.interest) }
         }
     }
 }
