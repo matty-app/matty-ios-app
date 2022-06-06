@@ -5,6 +5,7 @@ import CoreLocation
 protocol AnyDataStore {
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ())
     func fetchAllInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ())
+    func fetchUserEvents(completionHandler: @escaping ([AnyEventEntity]) -> ())
     func add(_ event: Event)
 }
 
@@ -39,6 +40,10 @@ class FirebaseStore: AnyDataStore {
         }
     }
     
+    func fetchUserEvents(completionHandler: @escaping ([AnyEventEntity]) -> ()) {
+        StubDataStore().fetchUserEvents(completionHandler: completionHandler)
+    }
+    
     func add(_ event: Event) {
         firestore.collection(.events).addDocument(data: [
             "name": event.name,
@@ -67,6 +72,11 @@ extension CLLocationCoordinate2D {
 class StubDataStore: AnyDataStore {
     
     let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toStubInterestEntities()
+    let events = [
+        eventEntity(name: "Afternoon Cycling", interest: "Cycling"),
+        eventEntity(name: "CS:GO game", interest: "CS:GO"),
+        eventEntity(name: "Soccer session", interest: "Soccer")
+    ]
     
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ()) {
         completionHandler(Array(interests.prefix(5)))
@@ -76,7 +86,24 @@ class StubDataStore: AnyDataStore {
         completionHandler(interests)
     }
     
+    func fetchUserEvents(completionHandler: @escaping ([AnyEventEntity]) -> ()) {
+        completionHandler(events)
+    }
+    
     func add(_ event: Event) { }
+    
+    static private func eventEntity(name: String, interest: String) -> StubEventEntity {
+        return StubEventEntity(event: Event(
+            name: name,
+            description: "",
+            details: "",
+            interest: Interest(name: interest),
+            location: nil,
+            date: .now,
+            isPublic: true,
+            withApproval: false
+        ))
+    }
 }
 
 extension Array where Element == String {

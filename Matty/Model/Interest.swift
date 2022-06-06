@@ -1,7 +1,6 @@
-import Foundation
 import FirebaseFirestore
 
-struct Interest: Equatable {
+struct Interest: Hashable {
     let name: String
 }
 

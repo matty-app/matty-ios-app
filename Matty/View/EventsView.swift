@@ -7,9 +7,9 @@ struct EventsView: View {
     var body: some View {
         NavigationView {
             VStack {
-                EventRow(title: "Afternoon Cycling")
-                EventRow(title: "CS:GO game")
-                EventRow(title: "Soccer session")
+                ForEach(eventFeed.userEvents, id: \.self) { event in
+                    EventRow(title: event.name)
+                }
                 Spacer()
                 ActionButton("Add Event") {
                     withAnimation {
@@ -38,6 +38,6 @@ struct EventsView: View {
 struct EventsView_Previews: PreviewProvider {
     static var previews: some View {
         EventsView()
-            .environmentObject(EventFeed())
+            .environmentObject(EventFeed(dataStore: StubDataStore()))
     }
 }
