@@ -73,9 +73,9 @@ class StubDataStore: AnyDataStore {
     
     let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toStubInterestEntities()
     let events = [
-        eventEntity(name: "Afternoon Cycling", interest: "Cycling"),
-        eventEntity(name: "CS:GO game", interest: "CS:GO"),
-        eventEntity(name: "Soccer session", interest: "Soccer")
+        eventEntity(name: "Afternoon Cycling", interest: "Cycling", descLength: 40),
+        eventEntity(name: "CS:GO game", interest: "CS:GO", descLength: 80),
+        eventEntity(name: "Soccer session", interest: "Soccer", descLength: 160)
     ]
     
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ()) {
@@ -92,10 +92,10 @@ class StubDataStore: AnyDataStore {
     
     func add(_ event: Event) { }
     
-    static private func eventEntity(name: String, interest: String) -> StubEventEntity {
+    static private func eventEntity(name: String, interest: String, descLength: Int) -> StubEventEntity {
         return StubEventEntity(event: Event(
             name: name,
-            description: "",
+            description: String.randomText(length: descLength),
             details: "",
             interest: Interest(name: interest),
             location: nil,
@@ -142,5 +142,26 @@ extension Firestore {
     
     func collection(_ collection: FirebaseStore.Collection) -> CollectionReference {
         self.collection(collection.rawValue)
+    }
+}
+
+extension String {
+
+    static func randomText(length: Int) -> String {
+        var text = ""
+        while text.count < length {
+            text += "\(randomWord()) "
+        }
+        return String(text.prefix(length))
+    }
+    
+    static func randomWord() -> String {
+        var word = ""
+        for _ in 1...Int.random(in: 1...6) {
+            if let scalar = UnicodeScalar(Int.random(in: 97...122)) {
+                word.append(Character(scalar))
+            }
+        }
+        return word
     }
 }
