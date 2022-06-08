@@ -7,7 +7,7 @@ class NewEvent: ObservableObject {
     @Published var description = ""
     @Published var privateDetails = ""
     @Published var interest = ""
-    @Published var locationName  = ""
+    @Published var locationName = ""
     @Published var locationCoordinate: CLLocationCoordinate2D?
     @Published var date = Date.now
     @Published var now = true
@@ -52,7 +52,8 @@ class NewEvent: ObservableObject {
             description: description,
             details: privateDetails,
             interest: selectedInterest!,
-            location: locationCoordinate,
+            coordinates: locationCoordinate,
+            locationName: locationName,
             date: now ? nil : date,
             isPublic: isPublic,
             withApproval: approvalRequired

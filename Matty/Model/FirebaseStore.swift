@@ -50,7 +50,8 @@ class FirebaseStore: AnyDataStore {
             "description": event.description,
             "details": event.details,
             "interest": ref(event.interest)!,
-            "location": event.location?.toGeoPoint() ?? NSNull(),
+            "coordinates": event.coordinates?.toGeoPoint() ?? NSNull(),
+            "locationName": event.locationName,
             "date": event.date ?? NSNull(),
             "public": event.isPublic,
             "withApproval": event.withApproval
@@ -73,9 +74,9 @@ class StubDataStore: AnyDataStore {
     
     let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toStubInterestEntities()
     let events = [
-        eventEntity(name: "Afternoon Cycling", interest: "Cycling", descLength: 40),
-        eventEntity(name: "CS:GO game", interest: "CS:GO", descLength: 80),
-        eventEntity(name: "Soccer session", interest: "Soccer", descLength: 160)
+        eventEntity(name: "Afternoon Cycling", interest: "Cycling", descLength: 40, location: "Bitcevskij park"),
+        eventEntity(name: "CS:GO game", interest: "CS:GO", descLength: 80, location: "de_dust2"),
+        eventEntity(name: "Soccer session", interest: "Soccer", descLength: 160, location: "Moscow, Taganskaya street, 40-42")
     ]
     
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ()) {
@@ -92,13 +93,14 @@ class StubDataStore: AnyDataStore {
     
     func add(_ event: Event) { }
     
-    static private func eventEntity(name: String, interest: String, descLength: Int) -> StubEventEntity {
+    static private func eventEntity(name: String, interest: String, descLength: Int, location: String) -> StubEventEntity {
         return StubEventEntity(event: Event(
             name: name,
-            description: String.randomText(length: descLength),
+            description: String.loremIpsum(length: descLength),
             details: "",
             interest: Interest(name: interest),
-            location: nil,
+            coordinates: nil,
+            locationName: location,
             date: .now,
             isPublic: true,
             withApproval: false
@@ -147,21 +149,7 @@ extension Firestore {
 
 extension String {
 
-    static func randomText(length: Int) -> String {
-        var text = ""
-        while text.count < length {
-            text += "\(randomWord()) "
-        }
-        return String(text.prefix(length))
-    }
-    
-    static func randomWord() -> String {
-        var word = ""
-        for _ in 1...Int.random(in: 1...6) {
-            if let scalar = UnicodeScalar(Int.random(in: 97...122)) {
-                word.append(Character(scalar))
-            }
-        }
-        return word
+    static func loremIpsum(length: Int) -> String {
+        return String("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".prefix(length))
     }
 }

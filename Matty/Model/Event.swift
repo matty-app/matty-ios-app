@@ -6,7 +6,8 @@ struct Event: Hashable {
     let description: String
     let details: String
     let interest: Interest
-    let location: CLLocationCoordinate2D?
+    let coordinates: CLLocationCoordinate2D?
+    let locationName: String
     let date: Date?
     let isPublic: Bool
     let withApproval: Bool

@@ -43,15 +43,14 @@ struct EventsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom, 1)
             HStack(alignment: .top) {
-                Text("Moscow, Kremlin")
+                Text(event.locationName)
                     .font(.footnote)
                     .foregroundColor(.gray)
                     .underline()
                 Spacer()
-                Text("June 3, 18:30")
+                Text(event.date?.formatted(date: .abbreviated, time: .omitted) ?? "")
                     .font(.footnote)
                     .foregroundColor(.gray)
-                    
             }
         }.padding(.horizontal)
     }
