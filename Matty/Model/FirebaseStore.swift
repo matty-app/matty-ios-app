@@ -74,9 +74,9 @@ class StubDataStore: AnyDataStore {
     
     let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toStubInterestEntities()
     let events = [
-        eventEntity(name: "Afternoon Cycling", interest: "Cycling", descLength: 40, location: "Bitcevskij park"),
-        eventEntity(name: "CS:GO game", interest: "CS:GO", descLength: 80, location: "de_dust2"),
-        eventEntity(name: "Soccer session", interest: "Soccer", descLength: 160, location: "Moscow, Taganskaya street, 40-42")
+        eventEntity(name: "Afternoon Cycling", interest: "Cycling", descLength: 40, location: "Bitcevskij park", date: nil),
+        eventEntity(name: "CS:GO game", interest: "CS:GO", descLength: 80, location: "de_dust2", date: .now.addingTimeInterval(1000)),
+        eventEntity(name: "Soccer session", interest: "Soccer", descLength: 160, location: "Moscow, Taganskaya street, 40-42", date: .now.addingTimeInterval(9000))
     ]
     
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ()) {
@@ -93,7 +93,7 @@ class StubDataStore: AnyDataStore {
     
     func add(_ event: Event) { }
     
-    static private func eventEntity(name: String, interest: String, descLength: Int, location: String) -> StubEventEntity {
+    static private func eventEntity(name: String, interest: String, descLength: Int, location: String, date: Date?) -> StubEventEntity {
         return StubEventEntity(event: Event(
             name: name,
             description: String.loremIpsum(length: descLength),
@@ -101,7 +101,7 @@ class StubDataStore: AnyDataStore {
             interest: Interest(name: interest),
             coordinates: nil,
             locationName: location,
-            date: .now,
+            date: date,
             isPublic: true,
             withApproval: false
         ))

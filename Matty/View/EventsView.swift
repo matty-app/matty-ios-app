@@ -32,11 +32,7 @@ struct EventsView: View {
                 Text(event.name)
                     .font(.title2)
                 Spacer()
-                Text("3m")
-                    .padding(.horizontal)
-                    .padding(.vertical, 5)
-                    .background(.yellow)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                TimeBadge(event.date)
             }
             Text(event.description)
                 .lineLimit(3)
@@ -53,6 +49,70 @@ struct EventsView: View {
                     .foregroundColor(.gray)
             }
         }.padding(.horizontal)
+    }
+    
+    func TimeBadge(_ date: Date?) -> some View {
+        Text(timeUntil(date))
+            .padding(.horizontal)
+            .padding(.vertical, 5)
+            .font(.headline)
+            .timeBadgeStyle(TimeBadgeStyle.from(date))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+    
+    func timeUntil(_ date: Date?) -> String {
+        if let date = date {
+            if date.secondsFromNow < 60 { return "1m" }
+            
+            let minutes = date.minutesFromNow
+            if minutes < 60 { return "\(minutes)m" }
+            
+            let hours = date.hoursFromNow
+            if hours < 24 { return "\(hours)h" }
+            
+            let years = date.yearsFromNow
+            if years > 0 { return "\(years)y" }
+            
+            return "\(date.daysFromNow)d"
+        } else {
+            return "Now"
+        }
+    }
+}
+
+class TimeBadgeStyle {
+    
+    static let now = TimeBadgeStyle(backgroundColor: .red, foregroundColor: .white)
+    static let soon = TimeBadgeStyle(backgroundColor: .yellow, foregroundColor: .black)
+    static let later = TimeBadgeStyle(backgroundColor: .green, foregroundColor: .black)
+    
+    let backgroundColor: Color
+    let foregroundColor: Color
+    
+    private init(backgroundColor: Color, foregroundColor: Color) {
+        self.backgroundColor = backgroundColor
+        self.foregroundColor = foregroundColor
+    }
+    
+    static func from(_ date: Date?) -> TimeBadgeStyle {
+        if let date = date {
+            if date.hoursFromNow < 1 {
+                return .soon
+            } else {
+                return .later
+            }
+        } else {
+            return .now
+        }
+    }
+}
+
+extension View {
+    
+    fileprivate func timeBadgeStyle(_ style: TimeBadgeStyle) -> some View {
+        self
+            .background(style.backgroundColor)
+            .foregroundColor(style.foregroundColor)
     }
 }
 

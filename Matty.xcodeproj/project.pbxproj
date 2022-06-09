@@ -34,6 +34,7 @@
 		F58B749928397A3400C90B6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749828397A3400C90B6E /* Assets.xcassets */; };
 		F58B749C28397A3400C90B6E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749B28397A3400C90B6E /* Preview Assets.xcassets */; };
 		F5AA67F9284A9348005DABD5 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AA67F8284A9348005DABD5 /* Event.swift */; };
+		F5D80872285268340094BC07 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D80871285268340094BC07 /* DateExtensions.swift */; };
 		F5EC7CE6283E7A2F0094E5D8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5EC7CE5283E7A2F0094E5D8 /* SearchView.swift */; };
 		F5EC7CE8283E861C0094E5D8 /* EventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5EC7CE7283E861C0094E5D8 /* EventsView.swift */; };
 		F5EC7CEA283E87B10094E5D8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5EC7CE9283E87B10094E5D8 /* ProfileView.swift */; };
@@ -68,6 +69,7 @@
 		F58B749828397A3400C90B6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F58B749B28397A3400C90B6E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F5AA67F8284A9348005DABD5 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		F5D80871285268340094BC07 /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		F5EC7CE5283E7A2F0094E5D8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		F5EC7CE7283E861C0094E5D8 /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
 		F5EC7CE9283E87B10094E5D8 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				F506978F28397F0600114C2E /* MapKitExtensions.swift */,
+				F5D80871285268340094BC07 /* DateExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				F5EC7CEC28415BBF0094E5D8 /* Profile.swift in Sources */,
 				F5EC7CEA283E87B10094E5D8 /* ProfileView.swift in Sources */,
 				F506976328397CEF00114C2E /* FirebaseStore.swift in Sources */,
+				F5D80872285268340094BC07 /* DateExtensions.swift in Sources */,
 				F58B749528397A3400C90B6E /* MattyApp.swift in Sources */,
 				F506977A28397DEB00114C2E /* NewEventLocationSelectionView.swift in Sources */,
 				F506976D28397D5C00114C2E /* SignUpView.swift in Sources */,
