@@ -27,7 +27,7 @@ struct EventsView: View {
     func EventRow(for event: Event) -> some View {
         VStack {
             HStack {
-                Text("⚽️")
+                Text(event.interest.emoji)
                     .font(.system(size: 50).weight(.light))
                 Text(event.name)
                     .font(.title2)
@@ -57,7 +57,7 @@ struct EventsView: View {
             .padding(.vertical, 5)
             .font(.headline)
             .timeBadgeStyle(TimeBadgeStyle.from(date))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(Capsule())
     }
     
     func timeUntil(_ date: Date?) -> String {
@@ -96,7 +96,7 @@ class TimeBadgeStyle {
     
     static func from(_ date: Date?) -> TimeBadgeStyle {
         if let date = date {
-            if date.hoursFromNow < 1 {
+            if date.hoursFromNow < 24 {
                 return .soon
             } else {
                 return .later
