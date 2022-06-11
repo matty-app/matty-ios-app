@@ -10,7 +10,6 @@ struct EventsView: View {
                 ScrollView {
                     ForEach(eventFeed.userEvents, id: \.self) { event in
                         EventRow(for: event)
-                        Divider()
                     }
                 }.padding(.top)
                 Spacer()
@@ -27,10 +26,14 @@ struct EventsView: View {
     func EventRow(for event: Event) -> some View {
         VStack {
             HStack {
-                Text(event.interest.emoji)
-                    .font(.system(size: 50).weight(.light))
-                Text(event.name)
-                    .font(.title2)
+                Image(systemName: "person.crop.circle.fill")
+                    .font(.system(size: 40))
+                VStack(alignment: .leading) {
+                    Text(event.name)
+                        .font(.headline)
+                    Text("\(event.interest.emoji) \(event.interest.name)")
+                        .font(.footnote)
+                }
                 Spacer()
                 TimeBadge(event.date)
             }
@@ -48,7 +51,12 @@ struct EventsView: View {
                     .font(.footnote)
                     .foregroundColor(.gray)
             }
-        }.padding(.horizontal)
+        }
+        .padding()
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .padding(.horizontal)
+        .padding(.vertical, 5)
     }
     
     func TimeBadge(_ date: Date?) -> some View {
