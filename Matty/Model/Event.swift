@@ -11,6 +11,7 @@ struct Event: Hashable {
     let date: Date?
     let isPublic: Bool
     let withApproval: Bool
+    let creator: User
 }
 
 protocol AnyEventEntity {

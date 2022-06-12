@@ -56,7 +56,8 @@ class NewEvent: ObservableObject {
             locationName: locationName,
             date: now ? nil : date,
             isPublic: isPublic,
-            withApproval: approvalRequired
+            withApproval: approvalRequired,
+            creator: .dev
         )
     }
 }

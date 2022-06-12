@@ -47,7 +47,7 @@ struct EventsView: View {
                     .foregroundColor(.gray)
                     .underline()
                 Spacer()
-                Text(event.date?.formatted(date: .abbreviated, time: .omitted) ?? "")
+                Text((event.date ?? .now).formatted(date: .abbreviated, time: .omitted))
                     .font(.footnote)
                     .foregroundColor(.gray)
             }

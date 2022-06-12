@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 class EventFeed: ObservableObject {
     
     @Published var showNewEventScreen = false
@@ -9,8 +10,9 @@ class EventFeed: ObservableObject {
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
-        dataStore.fetchUserEvents { entities in
-            self.userEvents = entities.map { $0.event }
+        Task {
+            let events = await dataStore.fetchUserEvents()
+            userEvents = events.map { $0.event }
         }
     }
     

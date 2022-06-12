@@ -5,7 +5,7 @@ import CoreLocation
 protocol AnyDataStore {
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ())
     func fetchAllInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ())
-    func fetchUserEvents(completionHandler: @escaping ([AnyEventEntity]) -> ())
+    func fetchUserEvents() async -> [AnyEventEntity]
     func add(_ event: Event)
 }
 
@@ -15,6 +15,8 @@ class FirebaseStore: AnyDataStore {
     
     private let firestore = Firestore.firestore()
     private var allInterests = [InterestEntity]()
+    private var userEvents = [EventEntity]()
+    private var cachedUsers = [UserEntity]()
     
     private init() { }
     
@@ -40,8 +42,17 @@ class FirebaseStore: AnyDataStore {
         }
     }
     
-    func fetchUserEvents(completionHandler: @escaping ([AnyEventEntity]) -> ()) {
-        StubDataStore().fetchUserEvents(completionHandler: completionHandler)
+    func fetchUserEvents() async -> [AnyEventEntity] {
+        userEvents = []
+        let snapshot = try? await firestore.collection(.events).getDocuments()
+        if let snapshot = snapshot {
+            for document in snapshot.documents {
+                if let entity = await self.eventEntity(from: document) {
+                    userEvents.append(entity)
+                }
+            }
+        }
+        return userEvents
     }
     
     func add(_ event: Event) {
@@ -54,16 +65,56 @@ class FirebaseStore: AnyDataStore {
             "locationName": event.locationName,
             "date": event.date ?? NSNull(),
             "public": event.isPublic,
-            "withApproval": event.withApproval
+            "withApproval": event.withApproval,
+            "creator": ref(event.creator)!
         ])
     }
     
     private func ref(_ interest: Interest) -> DocumentReference? {
         allInterests.first { $0.interest == interest }?.ref
     }
+    
+    private func ref(_ user: User) -> DocumentReference? {
+        cachedUsers.first { $0.user == user }?.ref
+    }
+    
+    private func eventEntity(from document: DocumentSnapshot) async -> EventEntity? {
+        guard let name = document["name"] as? String else { return nil }
+        guard let description = document["description"] as? String else { return nil }
+        guard let details = document["details"] as? String else { return nil }
+        let geoPoint = document["coordinates"] as? GeoPoint
+        guard let locationName = document["locationName"] as? String else { return nil }
+        let date = (document["date"] as? Timestamp)?.dateValue()
+        guard let isPublic = document["public"] as? Bool else { return nil }
+        guard let withApproval = document["withApproval"] as? Bool else { return nil }
+        guard let interestRef = document["interest"] as? DocumentReference else { return nil }
+        guard let interestDoc = try? await interestRef.getDocument() else { return nil }
+        guard let interest = InterestEntity.from(interestDoc)?.interest else { return nil }
+        
+        return EventEntity(event: Event(
+            name: name,
+            description: description,
+            details: details,
+            interest: interest,
+            coordinates: .from(geoPoint),
+            locationName: locationName,
+            date: date,
+            isPublic: isPublic,
+            withApproval: withApproval,
+            creator: .dev
+        ), ref: document.reference)
+    }
 }
 
 extension CLLocationCoordinate2D {
+    
+    static func from(_ geoPoint: GeoPoint?) -> CLLocationCoordinate2D? {
+        if let geoPoint = geoPoint {
+            return self.init(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+        } else {
+            return nil
+        }
+    }
     
     func toGeoPoint() -> GeoPoint {
         return GeoPoint(latitude: latitude, longitude: longitude)
@@ -73,7 +124,7 @@ extension CLLocationCoordinate2D {
 class StubDataStore: AnyDataStore {
     
     let interests = ["CS:GO", "Hiking", "Adventure", "Swimming", "Cycling", "Documentary", "Coding"].toStubInterestEntities()
-    let events = [
+    let userEvents = [
         eventEntity(name: "Afternoon Cycling", interest: Interest(name: "Cycling", emoji: "🚴"), descLength: 40, location: "Bitcevskij park", date: nil),
         eventEntity(name: "CS:GO game", interest: Interest(name: "CS:GO", emoji: "🎮"), descLength: 80, location: "de_dust2", date: .now.addingTimeInterval(900)),
         eventEntity(name: "Soccer session", interest: Interest(name: "Soccer", emoji: "⚽️"), descLength: 160, location: "Moscow, Taganskaya street, 40-42", date: .now.addingTimeInterval(90000))
@@ -87,8 +138,8 @@ class StubDataStore: AnyDataStore {
         completionHandler(interests)
     }
     
-    func fetchUserEvents(completionHandler: @escaping ([AnyEventEntity]) -> ()) {
-        completionHandler(events)
+    func fetchUserEvents() async -> [AnyEventEntity] {
+        return userEvents
     }
     
     func add(_ event: Event) { }
@@ -103,7 +154,8 @@ class StubDataStore: AnyDataStore {
             locationName: location,
             date: date,
             isPublic: true,
-            withApproval: false
+            withApproval: false,
+            creator: .dev
         ))
     }
 }
@@ -122,13 +174,11 @@ extension Array where Element == String {
 
 extension InterestEntity {
     
-    static func from(_ document: QueryDocumentSnapshot) -> InterestEntity? {
-        if let name = document.get("name") as? String {
-            let interest = Interest(name: name)
-            return InterestEntity(interest: interest, ref: document.reference)
-        } else {
-            return nil
-        }
+    static func from(_ document: DocumentSnapshot) -> InterestEntity? {
+        guard let name = document["name"] as? String else { return nil }
+        let emoji = document["emoji"] as? String ?? ""
+        let interest = Interest(name: name, emoji: emoji)
+        return InterestEntity(interest: interest, ref: document.reference)
     }
 }
 
@@ -137,6 +187,7 @@ extension FirebaseStore {
     enum Collection: String {
         case interests
         case events
+        case users
     }
 }
 
