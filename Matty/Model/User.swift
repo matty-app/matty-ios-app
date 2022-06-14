@@ -20,5 +20,5 @@ struct StubUserEntity: AnyUserEntity {
 }
 
 extension User {
-    static let dev = User(name: "dev", email: "dev@matty.com", interests: [])
+    static let dev = User(name: "Dev", email: "dev@matty.com", interests: [])
 }

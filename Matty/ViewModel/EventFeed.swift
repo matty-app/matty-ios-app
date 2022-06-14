@@ -4,7 +4,9 @@ import Foundation
 class EventFeed: ObservableObject {
     
     @Published var showNewEventScreen = false
+    @Published var showEventDetailsScreen = false
     @Published var userEvents = [Event]()
+    @Published var selectedEvent: Event?
     
     private let dataStore: AnyDataStore
     
@@ -18,5 +20,15 @@ class EventFeed: ObservableObject {
     
     func addEvent() {
         showNewEventScreen = true
+    }
+    
+    func showEventDetails(for event: Event) {
+        selectedEvent = event
+        showEventDetailsScreen = true
+    }
+    
+    func hideEventDetails() {
+        selectedEvent = nil
+        showEventDetailsScreen = false
     }
 }

@@ -18,7 +18,11 @@ class FirebaseStore: AnyDataStore {
     private var userEvents = [EventEntity]()
     private var cachedUsers = [UserEntity]()
     
-    private init() { }
+    private init() {
+        Task {
+            await fetchAllUsers()
+        }
+    }
     
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ()) {
         StubDataStore().fetchUserInterests(completionHandler: completionHandler)
@@ -53,6 +57,19 @@ class FirebaseStore: AnyDataStore {
             }
         }
         return userEvents
+    }
+    
+    private func fetchAllUsers() async -> [UserEntity] {
+        cachedUsers = []
+        let snapshot = try? await firestore.collection(.users).getDocuments()
+        if let snapshot = snapshot {
+            for document in snapshot.documents {
+                if let entity = await self.userEntity(from: document) {
+                    cachedUsers.append(entity)
+                }
+            }
+        }
+        return cachedUsers
     }
     
     func add(_ event: Event) {
@@ -102,6 +119,17 @@ class FirebaseStore: AnyDataStore {
             isPublic: isPublic,
             withApproval: withApproval,
             creator: .dev
+        ), ref: document.reference)
+    }
+    
+    private func userEntity(from document: DocumentSnapshot) async -> UserEntity? {
+        guard let name = document["name"] as? String else { return nil }
+        guard let email = document["email"] as? String else { return nil }
+        
+        return UserEntity(user: User(
+            name: name,
+            email: email,
+            interests: []
         ), ref: document.reference)
     }
 }
