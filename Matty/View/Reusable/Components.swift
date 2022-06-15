@@ -176,3 +176,131 @@ struct CancelButton: View {
         }
     }
 }
+
+struct EventCard: View {
+    
+    private var event: Event
+    private var action: () -> ()
+    
+    init(for event: Event, action: @escaping () -> ()) {
+        self.event = event
+        self.action = action
+    }
+    
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            VStack {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.system(size: 40))
+                    VStack(alignment: .leading) {
+                        Text(event.name)
+                            .font(.headline)
+                        Text("\(event.interest.emoji) \(event.interest.name)")
+                            .font(.footnote)
+                    }
+                    Spacer()
+                    TimeBadge(event.date)
+                }
+                Text(event.description)
+                    .lineLimit(3)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 1)
+                HStack(alignment: .top) {
+                    Text(event.locationName)
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .underline()
+                    Spacer()
+                    Text(event.formattedDate)
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding()
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .padding(.horizontal)
+            .padding(.vertical, 5)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct TimeBadge: View {
+    
+    private var date: Date?
+    
+    init(_ date: Date?) {
+        self.date = date
+    }
+    
+    var body: some View {
+        Text(timeUntil(date))
+            .padding(.horizontal)
+            .padding(.vertical, 5)
+            .font(.headline)
+            .timeBadgeStyle(TimeBadge.Style.from(date))
+            .clipShape(Capsule())
+    }
+    
+    private func timeUntil(_ date: Date?) -> String {
+        if let date = date {
+            if date.secondsFromNow < 60 { return "1m" }
+            
+            let minutes = date.minutesFromNow
+            if minutes < 60 { return "\(minutes)m" }
+            
+            let hours = date.hoursFromNow
+            if hours < 24 { return "\(hours)h" }
+            
+            let years = date.yearsFromNow
+            if years > 0 { return "\(years)y" }
+            
+            return "\(date.daysFromNow)d"
+        } else {
+            return "Now"
+        }
+    }
+}
+
+extension TimeBadge {
+    
+    class Style {
+        
+        static let now = Style(backgroundColor: .red, foregroundColor: .white)
+        static let soon = Style(backgroundColor: .yellow, foregroundColor: .black)
+        static let later = Style(backgroundColor: .green, foregroundColor: .black)
+        
+        let backgroundColor: Color
+        let foregroundColor: Color
+        
+        private init(backgroundColor: Color, foregroundColor: Color) {
+            self.backgroundColor = backgroundColor
+            self.foregroundColor = foregroundColor
+        }
+        
+        static func from(_ date: Date?) -> Style {
+            if let date = date {
+                if date.hoursFromNow < 24 {
+                    return .soon
+                } else {
+                    return .later
+                }
+            } else {
+                return .now
+            }
+        }
+    }
+}
+
+extension View {
+    
+    func timeBadgeStyle(_ style: TimeBadge.Style) -> some View {
+        self
+            .background(style.backgroundColor)
+            .foregroundColor(style.foregroundColor)
+    }
+}
