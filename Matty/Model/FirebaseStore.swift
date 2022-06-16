@@ -83,7 +83,11 @@ class FirebaseStore: AnyDataStore {
     }
     
     func add(_ event: Event) {
-        firestore.collection(.events).addDocument(data: [
+        let batch = firestore.batch()
+        let userRef = firestore.collection(.users).document("dev")
+        let eventRef = firestore.collection(.events).document()
+        
+        batch.setData([
             "name": event.name,
             "description": event.description,
             "details": event.details,
@@ -93,8 +97,16 @@ class FirebaseStore: AnyDataStore {
             "date": event.date ?? NSNull(),
             "public": event.isPublic,
             "withApproval": event.withApproval,
-            "creator": ref(event.creator)!
-        ])
+            "creator": ref(event.creator)!,
+            "createdAt": Date.now,
+            "participants": [userRef]
+        ], forDocument: eventRef)
+        
+        batch.updateData([
+            "events": FieldValue.arrayUnion([eventRef])
+        ], forDocument: userRef)
+        
+        batch.commit()
     }
     
     private func ref(_ interest: Interest) -> DocumentReference? {

@@ -12,10 +12,7 @@ class EventFeed: ObservableObject {
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
-        Task {
-            let events = await dataStore.fetchUserEvents().map { $0.event }
-            userEvents = events.sorted { $0.date ?? .now < $1.date ?? .now }
-        }
+        loadUserEvents()
     }
     
     func addEvent() {
@@ -30,5 +27,12 @@ class EventFeed: ObservableObject {
     func hideEventDetails() {
         selectedEvent = nil
         showEventDetailsScreen = false
+    }
+    
+    func loadUserEvents() {
+        Task {
+            let events = await dataStore.fetchUserEvents().map { $0.event }
+            userEvents = events.sorted { $0.date ?? .now < $1.date ?? .now }
+        }
     }
 }
