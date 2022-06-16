@@ -13,8 +13,8 @@ class EventFeed: ObservableObject {
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
         Task {
-            let events = await dataStore.fetchUserEvents()
-            userEvents = events.map { $0.event }
+            let events = await dataStore.fetchUserEvents().map { $0.event }
+            userEvents = events.sorted { $0.date ?? .now < $1.date ?? .now }
         }
     }
     

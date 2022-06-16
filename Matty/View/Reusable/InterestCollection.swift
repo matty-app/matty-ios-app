@@ -62,6 +62,7 @@ struct InterestCollection: UIViewRepresentable {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumInteritemSpacing = 5
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.allowsMultipleSelection = true
         collection.dataSource = context.coordinator
