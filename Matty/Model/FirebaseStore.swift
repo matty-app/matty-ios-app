@@ -48,15 +48,25 @@ class FirebaseStore: AnyDataStore {
     
     func fetchUserEvents() async -> [AnyEventEntity] {
         userEvents = []
-        let snapshot = try? await firestore.collection(.events).getDocuments()
-        if let snapshot = snapshot {
-            for document in snapshot.documents {
-                if let entity = await self.eventEntity(from: document) {
-                    userEvents.append(entity)
+        if let user = await fetchUser() {
+            for eventRef in user.events {
+                if let snapshot = try? await eventRef.getDocument() {
+                    if let event = await eventEntity(from: snapshot) {
+                        userEvents.append(event)
+                    }
                 }
             }
         }
         return userEvents
+    }
+    
+    private func fetchUser() async -> UserEntity? {
+        //TODO: Fetch current user instead dev
+        if let snapshot = try? await firestore.collection(.users).document("dev").getDocument() {
+            return await userEntity(from: snapshot)
+        } else {
+            return nil
+        }
     }
     
     private func fetchAllUsers() async -> [UserEntity] {
@@ -125,12 +135,13 @@ class FirebaseStore: AnyDataStore {
     private func userEntity(from document: DocumentSnapshot) async -> UserEntity? {
         guard let name = document["name"] as? String else { return nil }
         guard let email = document["email"] as? String else { return nil }
+        guard let events = document["events"] as? [DocumentReference] else { return nil }
         
         return UserEntity(user: User(
             name: name,
             email: email,
             interests: []
-        ), ref: document.reference)
+        ), events: events, ref: document.reference)
     }
 }
 

@@ -12,6 +12,7 @@ protocol AnyUserEntity {
 
 struct UserEntity: AnyUserEntity {
     let user: User
+    let events: [DocumentReference]
     let ref: DocumentReference
 }
 
