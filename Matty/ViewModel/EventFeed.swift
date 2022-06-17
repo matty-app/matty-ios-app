@@ -24,7 +24,7 @@ class EventFeed: ObservableObject {
         showEventDetailsScreen = true
     }
     
-    func hideEventDetails() {
+    func closeEventDetails() {
         selectedEvent = nil
         showEventDetailsScreen = false
     }

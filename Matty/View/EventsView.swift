@@ -21,7 +21,7 @@ struct EventsView: View {
                     }
                 }
             }
-            .sheet(isPresented: $eventFeed.showEventDetailsScreen) {
+            .fullScreenCover(isPresented: $eventFeed.showEventDetailsScreen) {
                 if let selectedEvent = eventFeed.selectedEvent {
                     EventDetails(for: selectedEvent)
                 } else {
@@ -40,6 +40,34 @@ struct EventsView: View {
                 .padding(.top)
             Text(value)
                 .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    func EditEventButton() -> some View {
+        Button {
+            //TODO: Edit event
+        } label: {
+            Label("Edit", systemImage: "pencil")
+                .font(.headline)
+                .padding()
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(.regularMaterial)
+                .foregroundColor(.black)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
+    
+    func CloseDetailsButton() -> some View {
+        Button {
+            eventFeed.closeEventDetails()
+        } label: {
+            Label("Close", systemImage: "xmark")
+                .font(.headline)
+                .padding()
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(.blue)
+                .foregroundColor(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
     
@@ -65,9 +93,10 @@ struct EventsView: View {
             }
             .padding()
             Spacer()
-            ActionButton("Close") {
-                eventFeed.hideEventDetails()
-            }
+            HStack {
+                EditEventButton()
+                CloseDetailsButton()
+            }.padding(.horizontal)
         }
     }
 }
