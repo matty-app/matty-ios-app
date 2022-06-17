@@ -21,18 +21,61 @@ struct EventsView: View {
                     }
                 }
             }
-            .fullScreenCover(isPresented: $eventFeed.showEventDetailsScreen) {
-                if let selectedEvent = eventFeed.selectedEvent {
-                    EventDetails(for: selectedEvent)
-                } else {
-                    EmptyView()
-                }
-            }
             .navigationTitle("Upcoming")
+        }
+        .fullScreenCover(isPresented: $eventFeed.showEventDetailsScreen) {
+            if let selectedEvent = eventFeed.selectedEvent {
+                EventDetails(for: selectedEvent)
+                .fullScreenCover(isPresented: $eventFeed.showEditEventScreen) {
+                    Text("Edit Event")
+                }
+            } else {
+                EmptyView()
+            }
+        }
+    }
+}
+
+fileprivate struct EventDetails: View {
+    
+    @EnvironmentObject private var eventFeed: EventFeed
+    
+    private let event: Event
+    
+    init(for event: Event) {
+        self.event = event
+    }
+    
+    var body: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.system(size: 40))
+                    VStack(alignment: .leading) {
+                        Text(event.name)
+                            .font(.headline)
+                        Text("\(event.interest.emoji) \(event.interest.name)")
+                            .font(.footnote)
+                    }
+                    Spacer()
+                    TimeBadge(event.date)
+                }
+                Section("DESCRIPTION", value: event.description)
+                Section("DETAILS", value: event.details)
+                Section("LOCATION", value: event.locationName)
+                Section("DATE & TIME", value: event.formattedDate)
+            }
+            .padding()
+            Spacer()
+            HStack {
+                EditEventButton()
+                CloseDetailsButton()
+            }.padding(.horizontal)
         }
     }
     
-    func EventDetailsSection(_ header: String, value: String) -> some View {
+    func Section(_ header: String, value: String) -> some View {
         Group {
             Text(header)
                 .font(.subheadline)
@@ -45,7 +88,9 @@ struct EventsView: View {
     
     func EditEventButton() -> some View {
         Button {
-            //TODO: Edit event
+            withAnimation {
+                eventFeed.editEvent()
+            }
         } label: {
             Label("Edit", systemImage: "pencil")
                 .font(.headline)
@@ -68,35 +113,6 @@ struct EventsView: View {
                 .background(.blue)
                 .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-        }
-    }
-    
-    func EventDetails(for event: Event) -> some View {
-        VStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    Image(systemName: "person.crop.circle.fill")
-                        .font(.system(size: 40))
-                    VStack(alignment: .leading) {
-                        Text(event.name)
-                            .font(.headline)
-                        Text("\(event.interest.emoji) \(event.interest.name)")
-                            .font(.footnote)
-                    }
-                    Spacer()
-                    TimeBadge(event.date)
-                }
-                EventDetailsSection("DESCRIPTION", value: event.description)
-                EventDetailsSection("DETAILS", value: event.details)
-                EventDetailsSection("LOCATION", value: event.locationName)
-                EventDetailsSection("DATE & TIME", value: event.formattedDate)
-            }
-            .padding()
-            Spacer()
-            HStack {
-                EditEventButton()
-                CloseDetailsButton()
-            }.padding(.horizontal)
         }
     }
 }
