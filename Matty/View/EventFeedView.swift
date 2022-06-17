@@ -9,7 +9,7 @@ struct EventFeedView: View {
     var body: some View {
         if eventFeed.showNewEventScreen {
             NavigationView {
-                NewEventView(completionHandler: hideNewEventScreen)
+                NewEventView(completionHandler: onNewEventSubmit)
                     .toolbar {
                         ToolbarItem {
                             CloseButton(action: hideNewEventScreen)
@@ -46,6 +46,11 @@ struct EventFeedView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }.tag(2)
+    }
+    
+    func onNewEventSubmit() {
+        eventFeed.loadUserEvents()
+        hideNewEventScreen()
     }
     
     func hideNewEventScreen() {
