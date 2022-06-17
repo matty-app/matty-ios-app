@@ -16,12 +16,24 @@ struct EventsView: View {
                 }.padding(.top)
                 Spacer()
                 ActionButton("Add Event") {
-                    withAnimation {
-                        eventFeed.addEvent()
-                    }
+                    eventFeed.addEvent()
                 }
             }
             .navigationTitle("Upcoming")
+        }
+        .fullScreenCover(isPresented: $eventFeed.showNewEventScreen) {
+            NavigationView {
+                NewEventView {
+                    eventFeed.onNewEventSubmit()
+                }
+                .toolbar {
+                    ToolbarItem {
+                        CloseButton {
+                            eventFeed.closeNewEventScreen()
+                        }
+                    }
+                }
+            }
         }
         .fullScreenCover(isPresented: $eventFeed.showEventDetailsScreen) {
             if let selectedEvent = eventFeed.selectedEvent {
@@ -88,9 +100,7 @@ fileprivate struct EventDetails: View {
     
     func EditEventButton() -> some View {
         Button {
-            withAnimation {
-                eventFeed.editEvent()
-            }
+            eventFeed.editEvent()
         } label: {
             Label("Edit", systemImage: "pencil")
                 .font(.headline)

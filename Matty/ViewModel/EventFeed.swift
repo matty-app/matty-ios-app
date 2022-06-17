@@ -25,6 +25,10 @@ class EventFeed: ObservableObject {
         showEventDetailsScreen = true
     }
     
+    func closeNewEventScreen() {
+        showNewEventScreen = false
+    }
+    
     func closeEventDetails() {
         selectedEvent = nil
         showEventDetailsScreen = false
@@ -39,5 +43,10 @@ class EventFeed: ObservableObject {
             let events = await dataStore.fetchUserEvents().map { $0.event }
             userEvents = events.sorted { $0.date ?? .now < $1.date ?? .now }
         }
+    }
+    
+    func onNewEventSubmit() {
+        loadUserEvents()
+        closeNewEventScreen()
     }
 }

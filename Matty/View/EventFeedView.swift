@@ -7,21 +7,10 @@ struct EventFeedView: View {
     @State private var selectedTab = 0
     
     var body: some View {
-        if eventFeed.showNewEventScreen {
-            NavigationView {
-                NewEventView(completionHandler: onNewEventSubmit)
-                    .toolbar {
-                        ToolbarItem {
-                            CloseButton(action: hideNewEventScreen)
-                        }
-                    }
-            }
-        } else {
-            TabView(selection: $selectedTab) {
-                SearchViewTab()
-                EventsViewTab()
-                ProfileTabView()
-            }
+        TabView(selection: $selectedTab) {
+            SearchViewTab()
+            EventsViewTab()
+            ProfileTabView()
         }
     }
     
@@ -46,17 +35,6 @@ struct EventFeedView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }.tag(2)
-    }
-    
-    func onNewEventSubmit() {
-        eventFeed.loadUserEvents()
-        hideNewEventScreen()
-    }
-    
-    func hideNewEventScreen() {
-        withAnimation {
-            eventFeed.showNewEventScreen = false
-        }
     }
 }
 
