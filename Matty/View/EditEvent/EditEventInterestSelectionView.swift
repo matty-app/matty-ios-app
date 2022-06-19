@@ -1,28 +1,28 @@
 import SwiftUI
 
-struct NewEventInterestSelectionView: View {
+struct EditEventInterestSelectionView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     
-    @EnvironmentObject var newEvent: NewEvent
+    @EnvironmentObject var editEvent: EditEvent
     
     var body: some View {
         List {
-            if newEvent.noAvailableInterests {
+            if editEvent.noAvailableInterests {
                 Text("...")
             } else {
-                ForEach(newEvent.availableInterests, id: \.name) { interest in
+                ForEach(editEvent.availableInterests, id: \.name) { interest in
                     HStack {
                         Text(interest.name)
                         Spacer()
-                        if interest.name == newEvent.interest {
+                        if interest.name == editEvent.interest {
                             Image(systemName: "checkmark")
                                 .foregroundColor(.accentColor)
                         }
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        newEvent.setInterest(interest)
+                        editEvent.setInterest(interest)
                         dismissView()
                     }
                 }
@@ -36,10 +36,10 @@ struct NewEventInterestSelectionView: View {
     }
 }
 
-struct NewEventInterestSelectionView_Previews: PreviewProvider {
+struct EditEventInterestSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        let newEvent = NewEvent(dataStore: StubDataStore())
-        NewEventInterestSelectionView()
-            .environmentObject(newEvent)
+        let editEvent = EditEvent(dataStore: StubDataStore())
+        EditEventInterestSelectionView()
+            .environmentObject(editEvent)
     }
 }

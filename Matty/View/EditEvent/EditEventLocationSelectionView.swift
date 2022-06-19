@@ -1,7 +1,7 @@
 import SwiftUI
 import MapKit
 
-struct NewEventLocationSelectionView: View {
+struct EditEventLocationSelectionView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     
@@ -185,10 +185,10 @@ struct NewEventLocationSelectionView: View {
     }
 }
 
-struct NewEventLocationSelectionView_Previews: PreviewProvider {
+struct EditEventLocationSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            NewEventLocationSelectionView { _, _ in }
+            EditEventLocationSelectionView { _, _ in }
         }
     }
 }

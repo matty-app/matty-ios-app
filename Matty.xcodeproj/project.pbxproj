@@ -16,15 +16,15 @@
 		F506976F28397D6B00114C2E /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506976E28397D6B00114C2E /* SignInView.swift */; };
 		F506977128397D7D00114C2E /* EmailCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977028397D7D00114C2E /* EmailCheckView.swift */; };
 		F506977328397D9100114C2E /* UserInterestsSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977228397D9100114C2E /* UserInterestsSelectionView.swift */; };
-		F506977628397DC700114C2E /* NewEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977528397DC700114C2E /* NewEventView.swift */; };
-		F506977828397DD500114C2E /* NewEventInterestSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977728397DD500114C2E /* NewEventInterestSelectionView.swift */; };
-		F506977A28397DEB00114C2E /* NewEventLocationSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977928397DEB00114C2E /* NewEventLocationSelectionView.swift */; };
-		F506977C28397DFA00114C2E /* NewEventDatetimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977B28397DFA00114C2E /* NewEventDatetimeSelectionView.swift */; };
+		F506977628397DC700114C2E /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977528397DC700114C2E /* EditEventView.swift */; };
+		F506977828397DD500114C2E /* EditEventInterestSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977728397DD500114C2E /* EditEventInterestSelectionView.swift */; };
+		F506977A28397DEB00114C2E /* EditEventLocationSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977928397DEB00114C2E /* EditEventLocationSelectionView.swift */; };
+		F506977C28397DFA00114C2E /* EditEventDatetimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977B28397DFA00114C2E /* EditEventDatetimeSelectionView.swift */; };
 		F506977F28397E2500114C2E /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506977E28397E2500114C2E /* Components.swift */; };
 		F506978128397E3300114C2E /* InterestCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978028397E3300114C2E /* InterestCollection.swift */; };
 		F506978428397E5B00114C2E /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978328397E5B00114C2E /* Auth.swift */; };
 		F506978628397E6900114C2E /* EventFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978528397E6900114C2E /* EventFeed.swift */; };
-		F506978828397E7500114C2E /* NewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978728397E7500114C2E /* NewEvent.swift */; };
+		F506978828397E7500114C2E /* EditEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978728397E7500114C2E /* EditEvent.swift */; };
 		F506978A28397E8100114C2E /* UserInterestsSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978928397E8100114C2E /* UserInterestsSelection.swift */; };
 		F506978D28397ED400114C2E /* MapSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978C28397ED400114C2E /* MapSearchService.swift */; };
 		F506979028397F0600114C2E /* MapKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978F28397F0600114C2E /* MapKitExtensions.swift */; };
@@ -51,15 +51,15 @@
 		F506976E28397D6B00114C2E /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		F506977028397D7D00114C2E /* EmailCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailCheckView.swift; sourceTree = "<group>"; };
 		F506977228397D9100114C2E /* UserInterestsSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterestsSelectionView.swift; sourceTree = "<group>"; };
-		F506977528397DC700114C2E /* NewEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventView.swift; sourceTree = "<group>"; };
-		F506977728397DD500114C2E /* NewEventInterestSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventInterestSelectionView.swift; sourceTree = "<group>"; };
-		F506977928397DEB00114C2E /* NewEventLocationSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventLocationSelectionView.swift; sourceTree = "<group>"; };
-		F506977B28397DFA00114C2E /* NewEventDatetimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventDatetimeSelectionView.swift; sourceTree = "<group>"; };
+		F506977528397DC700114C2E /* EditEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
+		F506977728397DD500114C2E /* EditEventInterestSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventInterestSelectionView.swift; sourceTree = "<group>"; };
+		F506977928397DEB00114C2E /* EditEventLocationSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventLocationSelectionView.swift; sourceTree = "<group>"; };
+		F506977B28397DFA00114C2E /* EditEventDatetimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventDatetimeSelectionView.swift; sourceTree = "<group>"; };
 		F506977E28397E2500114C2E /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
 		F506978028397E3300114C2E /* InterestCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterestCollection.swift; sourceTree = "<group>"; };
 		F506978328397E5B00114C2E /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		F506978528397E6900114C2E /* EventFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFeed.swift; sourceTree = "<group>"; };
-		F506978728397E7500114C2E /* NewEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEvent.swift; sourceTree = "<group>"; };
+		F506978728397E7500114C2E /* EditEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEvent.swift; sourceTree = "<group>"; };
 		F506978928397E8100114C2E /* UserInterestsSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterestsSelection.swift; sourceTree = "<group>"; };
 		F506978C28397ED400114C2E /* MapSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchService.swift; sourceTree = "<group>"; };
 		F506978F28397F0600114C2E /* MapKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapKitExtensions.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 			children = (
 				F506976728397D2E00114C2E /* EventFeedView.swift */,
 				F506976928397D3700114C2E /* Auth */,
-				F506977428397D9A00114C2E /* NewEvent */,
+				F506977428397D9A00114C2E /* EditEvent */,
 				F506977D28397E0300114C2E /* Reusable */,
 				F5EC7CE5283E7A2F0094E5D8 /* SearchView.swift */,
 				F5EC7CE7283E861C0094E5D8 /* EventsView.swift */,
@@ -127,15 +127,15 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		F506977428397D9A00114C2E /* NewEvent */ = {
+		F506977428397D9A00114C2E /* EditEvent */ = {
 			isa = PBXGroup;
 			children = (
-				F506977528397DC700114C2E /* NewEventView.swift */,
-				F506977728397DD500114C2E /* NewEventInterestSelectionView.swift */,
-				F506977928397DEB00114C2E /* NewEventLocationSelectionView.swift */,
-				F506977B28397DFA00114C2E /* NewEventDatetimeSelectionView.swift */,
+				F506977528397DC700114C2E /* EditEventView.swift */,
+				F506977728397DD500114C2E /* EditEventInterestSelectionView.swift */,
+				F506977928397DEB00114C2E /* EditEventLocationSelectionView.swift */,
+				F506977B28397DFA00114C2E /* EditEventDatetimeSelectionView.swift */,
 			);
-			path = NewEvent;
+			path = EditEvent;
 			sourceTree = "<group>";
 		};
 		F506977D28397E0300114C2E /* Reusable */ = {
@@ -153,7 +153,7 @@
 			children = (
 				F506978328397E5B00114C2E /* Auth.swift */,
 				F506978528397E6900114C2E /* EventFeed.swift */,
-				F506978728397E7500114C2E /* NewEvent.swift */,
+				F506978728397E7500114C2E /* EditEvent.swift */,
 				F506978928397E8100114C2E /* UserInterestsSelection.swift */,
 				F5EC7CEB28415BBF0094E5D8 /* Profile.swift */,
 			);
@@ -298,7 +298,7 @@
 				F506978128397E3300114C2E /* InterestCollection.swift in Sources */,
 				F5EC7CE8283E861C0094E5D8 /* EventsView.swift in Sources */,
 				F506976528397D0000114C2E /* Interest.swift in Sources */,
-				F506977828397DD500114C2E /* NewEventInterestSelectionView.swift in Sources */,
+				F506977828397DD500114C2E /* EditEventInterestSelectionView.swift in Sources */,
 				F506978628397E6900114C2E /* EventFeed.swift in Sources */,
 				F506978A28397E8100114C2E /* UserInterestsSelection.swift in Sources */,
 				F506977F28397E2500114C2E /* Components.swift in Sources */,
@@ -311,17 +311,17 @@
 				F506978428397E5B00114C2E /* Auth.swift in Sources */,
 				F50B7E472844E64B00E52EB8 /* ImagePicker.swift in Sources */,
 				F506978D28397ED400114C2E /* MapSearchService.swift in Sources */,
-				F506978828397E7500114C2E /* NewEvent.swift in Sources */,
+				F506978828397E7500114C2E /* EditEvent.swift in Sources */,
 				F506977328397D9100114C2E /* UserInterestsSelectionView.swift in Sources */,
 				F5EC7CEC28415BBF0094E5D8 /* Profile.swift in Sources */,
 				F5EC7CEA283E87B10094E5D8 /* ProfileView.swift in Sources */,
 				F506976328397CEF00114C2E /* FirebaseStore.swift in Sources */,
 				F5D80872285268340094BC07 /* DateExtensions.swift in Sources */,
 				F58B749528397A3400C90B6E /* MattyApp.swift in Sources */,
-				F506977A28397DEB00114C2E /* NewEventLocationSelectionView.swift in Sources */,
+				F506977A28397DEB00114C2E /* EditEventLocationSelectionView.swift in Sources */,
 				F506976D28397D5C00114C2E /* SignUpView.swift in Sources */,
-				F506977C28397DFA00114C2E /* NewEventDatetimeSelectionView.swift in Sources */,
-				F506977628397DC700114C2E /* NewEventView.swift in Sources */,
+				F506977C28397DFA00114C2E /* EditEventDatetimeSelectionView.swift in Sources */,
+				F506977628397DC700114C2E /* EditEventView.swift in Sources */,
 				F506976828397D2E00114C2E /* EventFeedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

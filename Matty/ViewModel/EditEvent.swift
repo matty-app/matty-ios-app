@@ -1,7 +1,7 @@
 import Foundation
 import CoreLocation
 
-class NewEvent: ObservableObject {
+class EditEvent: ObservableObject {
     
     @Published var name = ""
     @Published var description = ""
@@ -13,8 +13,9 @@ class NewEvent: ObservableObject {
     @Published var now = true
     @Published var isPublic = true
     @Published var approvalRequired = true
-    @Published var eventAdded = false
     @Published var availableInterests = [Interest]()
+    
+    let isNew: Bool
     
     var selectedInterest: Interest? {
         availableInterests.first { $0.name == interest }
@@ -30,7 +31,24 @@ class NewEvent: ObservableObject {
     
     private let dataStore: AnyDataStore
     
-    init(dataStore: AnyDataStore = FirebaseStore.shared) {
+    init(_ event: Event? = nil, dataStore: AnyDataStore = FirebaseStore.shared) {
+        if let event = event {
+            name = event.name
+            description = event.description
+            privateDetails = event.details
+            interest = event.interest.name
+            locationName = event.locationName
+            locationCoordinate = event.coordinates
+            if let date = event.date {
+                self.date = date
+                now = false
+            }
+            isPublic = event.isPublic
+            approvalRequired = event.withApproval
+            self.isNew = false
+        } else {
+            self.isNew = true
+        }
         self.dataStore = dataStore
         dataStore.fetchAllInterests { entities in
             self.availableInterests = entities.map { $0.interest }
@@ -43,7 +61,11 @@ class NewEvent: ObservableObject {
     
     func submit() {
         let event = toEvent()
-        dataStore.add(event)
+        if isNew {
+            dataStore.add(event)
+        } else {
+            //TODO: -
+        }
     }
     
     private func toEvent() -> Event {

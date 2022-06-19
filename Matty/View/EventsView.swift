@@ -22,27 +22,48 @@ struct EventsView: View {
             .navigationTitle("Upcoming")
         }
         .fullScreenCover(isPresented: $eventFeed.showNewEventScreen) {
-            NavigationView {
-                NewEventView {
-                    eventFeed.onNewEventSubmit()
-                }
-                .toolbar {
-                    ToolbarItem {
-                        CloseButton {
-                            eventFeed.closeNewEventScreen()
-                        }
-                    }
-                }
-            }
+            NewEventView()
         }
         .fullScreenCover(isPresented: $eventFeed.showEventDetailsScreen) {
             if let selectedEvent = eventFeed.selectedEvent {
                 EventDetails(for: selectedEvent)
                 .fullScreenCover(isPresented: $eventFeed.showEditEventScreen) {
-                    Text("Edit Event")
+                    ExistingEventView()
                 }
             } else {
                 EmptyView()
+            }
+        }
+    }
+    
+    func NewEventView() -> some View {
+        let vm = EditEvent()
+        return NavigationView {
+            EditEventView(vm: vm) {
+                eventFeed.onNewEventSubmit()
+            }
+            .toolbar {
+                ToolbarItem {
+                    CloseButton {
+                        eventFeed.closeNewEventScreen()
+                    }
+                }
+            }
+        }
+    }
+    
+    func ExistingEventView() -> some View {
+        let vm = EditEvent(eventFeed.selectedEvent)
+        return NavigationView {
+            EditEventView(vm: vm) {
+                //TODO: -
+            }
+            .toolbar {
+                ToolbarItem {
+                    CloseButton {
+                        eventFeed.closeEditEventScreen()
+                    }
+                }
             }
         }
     }
