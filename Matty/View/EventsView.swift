@@ -56,7 +56,7 @@ struct EventsView: View {
         let vm = EditEvent(eventFeed.selectedEvent)
         return NavigationView {
             EditEventView(vm: vm) {
-                //TODO: -
+                eventFeed.onExistingEventSave()
             }
             .toolbar {
                 ToolbarItem {

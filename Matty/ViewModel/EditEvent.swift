@@ -17,6 +17,8 @@ class EditEvent: ObservableObject {
     
     let isNew: Bool
     
+    private let event: Event?
+    
     var selectedInterest: Interest? {
         availableInterests.first { $0.name == interest }
     }
@@ -32,6 +34,7 @@ class EditEvent: ObservableObject {
     private let dataStore: AnyDataStore
     
     init(_ event: Event? = nil, dataStore: AnyDataStore = FirebaseStore.shared) {
+        self.event = event
         if let event = event {
             name = event.name
             description = event.description
@@ -64,12 +67,13 @@ class EditEvent: ObservableObject {
         if isNew {
             dataStore.add(event)
         } else {
-            //TODO: -
+            dataStore.update(event)
         }
     }
     
     private func toEvent() -> Event {
         return Event(
+            id: event?.id ?? "",
             name: name,
             description: description,
             details: privateDetails,

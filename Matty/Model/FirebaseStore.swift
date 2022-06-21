@@ -7,6 +7,7 @@ protocol AnyDataStore {
     func fetchAllInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ())
     func fetchUserEvents() async -> [AnyEventEntity]
     func add(_ event: Event)
+    func update(_ event: Event)
 }
 
 class FirebaseStore: AnyDataStore {
@@ -109,6 +110,25 @@ class FirebaseStore: AnyDataStore {
         batch.commit()
     }
     
+    func update(_ event: Event) {
+        let eventRef = ref(event)
+        if let eventRef = eventRef {
+            eventRef.updateData([
+                "name": event.name,
+                "description": event.description,
+                "details": event.details,
+                "interest": ref(event.interest)!,
+                "coordinates": event.coordinates?.toGeoPoint() ?? NSNull(),
+                "locationName": event.locationName,
+                "date": event.date ?? NSNull(),
+                "public": event.isPublic,
+                "withApproval": event.withApproval,
+            ])
+        } else {
+            //TODO: Handle event ref not found
+        }
+    }
+    
     private func ref(_ interest: Interest) -> DocumentReference? {
         allInterests.first { $0.interest == interest }?.ref
     }
@@ -117,7 +137,12 @@ class FirebaseStore: AnyDataStore {
         cachedUsers.first { $0.user == user }?.ref
     }
     
+    private func ref(_ event: Event) -> DocumentReference? {
+        userEvents.first { $0.event.id == event.id }?.ref
+    }
+    
     private func eventEntity(from document: DocumentSnapshot) async -> EventEntity? {
+        let id = document.documentID
         guard let name = document["name"] as? String else { return nil }
         guard let description = document["description"] as? String else { return nil }
         guard let details = document["details"] as? String else { return nil }
@@ -131,6 +156,7 @@ class FirebaseStore: AnyDataStore {
         guard let interest = InterestEntity.from(interestDoc)?.interest else { return nil }
         
         return EventEntity(event: Event(
+            id: id,
             name: name,
             description: description,
             details: details,
@@ -195,8 +221,11 @@ class StubDataStore: AnyDataStore {
     
     func add(_ event: Event) { }
     
+    func update(_ event: Event) { }
+    
     static private func eventEntity(name: String, interest: Interest, descLength: Int, location: String, date: Date?) -> StubEventEntity {
         return StubEventEntity(event: Event(
+            id: UUID().uuidString,
             name: name,
             description: String.loremIpsum(length: descLength),
             details: "",

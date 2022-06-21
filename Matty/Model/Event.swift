@@ -1,7 +1,8 @@
 import CoreLocation
 import FirebaseFirestore
 
-struct Event: Hashable {
+struct Event: Hashable, Identifiable {
+    let id: String
     let name: String
     let description: String
     let details: String
