@@ -6,11 +6,13 @@ struct EditEventView: View {
     
     @StateObject var vm: EditEvent
     
-    var completionHandler: () -> ()
+    private let onDelete: () -> ()
+    private let onSubmit: () -> ()
     
-    init(vm: EditEvent, completionHandler: @escaping () -> ()) {
+    init(vm: EditEvent, onSubmit: @escaping () -> (), onDelete: @escaping () -> () = {}) {
         self._vm = StateObject(wrappedValue: vm)
-        self.completionHandler = completionHandler
+        self.onDelete = onDelete
+        self.onSubmit = onSubmit
     }
     
     var body: some View {
@@ -42,10 +44,25 @@ struct EditEventView: View {
                 Toggle("Public", isOn: $vm.isPublic)
                 Toggle("Approval", isOn: $vm.approvalRequired)
             }
-            FormActionButton("Submit") {
-                vm.submit()
-                completionHandler()
+            if !vm.isNew {
+                Section {
+                    Button("Delete", role: .destructive) {
+                        vm.showDeleteConfirmation()
+                    }
+                }
             }
+            FormActionButton(vm.isNew ? "Submit" : "Save") {
+                vm.submit()
+                onSubmit()
+            }
+        }
+        .confirmationDialog("Are you sure?", isPresented: $vm.showDeleteConfirm) {
+            Button("Delete event", role: .destructive) {
+                vm.delete()
+                onDelete()
+            }
+        } message: {
+            Text("You cannot undo this action. Are you sure?")
         }
         .navigationTitle(vm.isNew ? "New Event" : "Edit Event")
         .navigationBarTitleDisplayMode(.inline)

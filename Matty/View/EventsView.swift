@@ -57,6 +57,8 @@ struct EventsView: View {
         return NavigationView {
             EditEventView(vm: vm) {
                 eventFeed.onExistingEventSave()
+            } onDelete: {
+                eventFeed.onExistingEventDelete()
             }
             .toolbar {
                 ToolbarItem {

@@ -14,6 +14,7 @@ class EditEvent: ObservableObject {
     @Published var isPublic = true
     @Published var approvalRequired = true
     @Published var availableInterests = [Interest]()
+    @Published var showDeleteConfirm = false
     
     let isNew: Bool
     
@@ -60,6 +61,16 @@ class EditEvent: ObservableObject {
     
     func setInterest(_ interest: Interest) {
         self.interest = interest.name
+    }
+    
+    func showDeleteConfirmation() {
+        showDeleteConfirm = true
+    }
+    
+    func delete() {
+        if let event = event {
+            dataStore.delete(event)
+        }
     }
     
     func submit() {

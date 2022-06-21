@@ -34,8 +34,8 @@ class EventFeed: ObservableObject {
     }
     
     func closeEventDetails() {
-        selectedEvent = nil
         showEventDetailsScreen = false
+        selectedEvent = nil
     }
     
     func editEvent() {
@@ -57,5 +57,13 @@ class EventFeed: ObservableObject {
     func onExistingEventSave() {
         loadUserEvents()
         closeEditEventScreen()
+    }
+    
+    func onExistingEventDelete() {
+        loadUserEvents()
+        closeEditEventScreen()
+        Task {
+            closeEventDetails()
+        }
     }
 }

@@ -8,6 +8,7 @@ protocol AnyDataStore {
     func fetchUserEvents() async -> [AnyEventEntity]
     func add(_ event: Event)
     func update(_ event: Event)
+    func delete(_ event: Event)
 }
 
 class FirebaseStore: AnyDataStore {
@@ -124,8 +125,13 @@ class FirebaseStore: AnyDataStore {
                 "public": event.isPublic,
                 "withApproval": event.withApproval,
             ])
-        } else {
-            //TODO: Handle event ref not found
+        }
+    }
+    
+    func delete(_ event: Event) {
+        let eventRef = ref(event)
+        if let eventRef = eventRef {
+            eventRef.delete()
         }
     }
     
@@ -222,6 +228,8 @@ class StubDataStore: AnyDataStore {
     func add(_ event: Event) { }
     
     func update(_ event: Event) { }
+    
+    func delete(_ event: Event) { }
     
     static private func eventEntity(name: String, interest: Interest, descLength: Int, location: String, date: Date?) -> StubEventEntity {
         return StubEventEntity(event: Event(
