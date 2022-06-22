@@ -82,7 +82,7 @@ class EditEvent: ObservableObject {
         }
     }
     
-    private func toEvent() -> Event {
+    func toEvent() -> Event {
         return Event(
             id: event?.id ?? "",
             name: name,

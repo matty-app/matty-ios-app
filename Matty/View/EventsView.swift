@@ -25,8 +25,11 @@ struct EventsView: View {
             NewEventView()
         }
         .fullScreenCover(isPresented: $eventFeed.showEventDetailsScreen) {
-            if let selectedEvent = eventFeed.selectedEvent {
+            if let selectedEvent = Binding($eventFeed.selectedEvent) {
                 EventDetails(for: selectedEvent)
+                .onDisappear {
+                    eventFeed.onEventDetailsDisappear()
+                }
                 .fullScreenCover(isPresented: $eventFeed.showEditEventScreen) {
                     ExistingEventView()
                 }
@@ -39,7 +42,7 @@ struct EventsView: View {
     func NewEventView() -> some View {
         let vm = EditEvent()
         return NavigationView {
-            EditEventView(vm: vm) {
+            EditEventView(vm: vm) { _ in
                 eventFeed.onNewEventSubmit()
             }
             .toolbar {
@@ -55,8 +58,8 @@ struct EventsView: View {
     func ExistingEventView() -> some View {
         let vm = EditEvent(eventFeed.selectedEvent)
         return NavigationView {
-            EditEventView(vm: vm) {
-                eventFeed.onExistingEventSave()
+            EditEventView(vm: vm) { event in 
+                eventFeed.onExistingEventSave(updatedEvent: event)
             } onDelete: {
                 eventFeed.onExistingEventDelete()
             }
@@ -75,10 +78,10 @@ fileprivate struct EventDetails: View {
     
     @EnvironmentObject private var eventFeed: EventFeed
     
-    private let event: Event
+    @Binding private var event: Event
     
-    init(for event: Event) {
-        self.event = event
+    init(for event: Binding<Event>) {
+        _event = event
     }
     
     var body: some View {
@@ -158,6 +161,7 @@ extension Event {
 }
 
 struct EventsView_Previews: PreviewProvider {
+    
     static var previews: some View {
         EventsView()
             .environmentObject(EventFeed(dataStore: StubDataStore()))

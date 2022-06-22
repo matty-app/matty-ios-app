@@ -7,9 +7,9 @@ struct EditEventView: View {
     @StateObject var vm: EditEvent
     
     private let onDelete: () -> ()
-    private let onSubmit: () -> ()
+    private let onSubmit: (Event) -> ()
     
-    init(vm: EditEvent, onSubmit: @escaping () -> (), onDelete: @escaping () -> () = {}) {
+    init(vm: EditEvent, onSubmit: @escaping (Event) -> (), onDelete: @escaping () -> () = {}) {
         self._vm = StateObject(wrappedValue: vm)
         self.onDelete = onDelete
         self.onSubmit = onSubmit
@@ -53,7 +53,7 @@ struct EditEventView: View {
             }
             FormActionButton(vm.isNew ? "Submit" : "Save") {
                 vm.submit()
-                onSubmit()
+                onSubmit(vm.toEvent())
             }
         }
         .confirmationDialog("Are you sure?", isPresented: $vm.showDeleteConfirm) {
@@ -90,7 +90,7 @@ struct EditEventView_Preview: PreviewProvider {
     static var previews: some View {
         NavigationView {
             let editEvent = EditEvent(dataStore: StubDataStore())
-            EditEventView(vm: editEvent) { }
+            EditEventView(vm: editEvent) { _ in }
         }
     }
 }

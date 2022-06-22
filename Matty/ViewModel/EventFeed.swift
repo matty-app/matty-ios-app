@@ -35,6 +35,9 @@ class EventFeed: ObservableObject {
     
     func closeEventDetails() {
         showEventDetailsScreen = false
+    }
+    
+    func onEventDetailsDisappear() {
         selectedEvent = nil
     }
     
@@ -54,7 +57,8 @@ class EventFeed: ObservableObject {
         closeNewEventScreen()
     }
     
-    func onExistingEventSave() {
+    func onExistingEventSave(updatedEvent: Event) {
+        selectedEvent = updatedEvent
         loadUserEvents()
         closeEditEventScreen()
     }
