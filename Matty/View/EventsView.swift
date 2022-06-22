@@ -6,18 +6,17 @@ struct EventsView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            ZStack {
                 ScrollView {
                     ForEach(eventFeed.userEvents, id: \.self) { event in
                         EventCard(for: event) {
                             eventFeed.showEventDetails(for: event)
                         }
                     }
+                    AddEventButtonPlaceholder()
                 }.padding(.top)
-                Spacer()
-                ActionButton("Add Event") {
-                    eventFeed.addEvent()
-                }
+                FooterGradient()
+                Footer()
             }
             .navigationTitle("Upcoming")
         }
@@ -36,6 +35,33 @@ struct EventsView: View {
             } else {
                 EmptyView()
             }
+        }
+    }
+    
+    func AddEventButton() -> some View {
+        ActionButton("Add Event") {
+            eventFeed.addEvent()
+        }
+    }
+    
+    func AddEventButtonPlaceholder() -> some View {
+        AddEventButton()
+            .hidden()
+    }
+    
+    func Footer() -> some View {
+        VStack {
+            Spacer()
+            AddEventButton()
+        }
+    }
+    
+    func FooterGradient() -> some View {
+        VStack {
+            Spacer()
+            Rectangle()
+                .fill(LinearGradient.fade())
+                .frame(maxWidth: .infinity, maxHeight: 100)
         }
     }
     
@@ -71,6 +97,13 @@ struct EventsView: View {
                 }
             }
         }
+    }
+}
+
+extension LinearGradient {
+    
+    static func fade(color: Color = .white) -> LinearGradient {
+        return LinearGradient(gradient: Gradient(colors: [color.opacity(0), color]), startPoint: .top, endPoint: .bottom)
     }
 }
 
