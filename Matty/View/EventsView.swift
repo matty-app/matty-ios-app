@@ -135,7 +135,7 @@ fileprivate struct EventDetails: View {
                 Section("DESCRIPTION", value: event.description)
                 Section("DETAILS", value: event.details)
                 Section("LOCATION", value: event.locationName)
-                Section("DATE & TIME", value: event.formattedDate)
+                Section("DATE & TIME", value: event.formattedDatetime)
             }
             .padding()
             Spacer()
@@ -190,6 +190,14 @@ extension Event {
     
     var formattedDate: String {
         return (date ?? .now).formatted(date: .abbreviated, time: .omitted)
+    }
+    
+    var formattedDatetime: String {
+        if let date = date {
+            return date.formatted()
+        } else {
+            return formattedDate
+        }
     }
 }
 
