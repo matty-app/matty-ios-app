@@ -94,7 +94,8 @@ class EditEvent: ObservableObject {
             date: now ? nil : date,
             isPublic: isPublic,
             withApproval: approvalRequired,
-            creator: .dev
+            creator: .dev,
+            createdAt: event?.createdAt ?? .now
         )
     }
 }

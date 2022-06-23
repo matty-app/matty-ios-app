@@ -13,6 +13,7 @@ struct Event: Hashable, Identifiable {
     let isPublic: Bool
     let withApproval: Bool
     let creator: User
+    let createdAt: Date
 }
 
 protocol AnyEventEntity {

@@ -157,6 +157,7 @@ class FirebaseStore: AnyDataStore {
         let date = (document["date"] as? Timestamp)?.dateValue()
         guard let isPublic = document["public"] as? Bool else { return nil }
         guard let withApproval = document["withApproval"] as? Bool else { return nil }
+        guard let createdAt = (document["createdAt"] as? Timestamp)?.dateValue() else { return nil }
         guard let interestRef = document["interest"] as? DocumentReference else { return nil }
         guard let interestDoc = try? await interestRef.getDocument() else { return nil }
         guard let interest = InterestEntity.from(interestDoc)?.interest else { return nil }
@@ -172,7 +173,8 @@ class FirebaseStore: AnyDataStore {
             date: date,
             isPublic: isPublic,
             withApproval: withApproval,
-            creator: .dev
+            creator: .dev,
+            createdAt: createdAt
         ), ref: document.reference)
     }
     
@@ -243,7 +245,8 @@ class StubDataStore: AnyDataStore {
             date: date,
             isPublic: true,
             withApproval: false,
-            creator: .dev
+            creator: .dev,
+            createdAt: .now
         ))
     }
 }
