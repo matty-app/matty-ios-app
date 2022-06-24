@@ -16,6 +16,13 @@ struct Event: Hashable, Identifiable {
     let createdAt: Date
 }
 
+extension Event {
+    
+    var past: Bool {
+        return (date ?? .now) < .now
+    }
+}
+
 protocol AnyEventEntity {
     var event: Event { get }
 }

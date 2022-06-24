@@ -49,6 +49,10 @@ class EventFeed: ObservableObject {
         Task {
             let events = await dataStore.fetchUserEvents().map { $0.event }
             userEvents = events.sorted { $0.date ?? .now < $1.date ?? .now }
+            while userEvents.first?.past ?? false {
+                let pastEvent = userEvents.removeFirst()
+                userEvents.append(pastEvent)
+            }
         }
     }
     

@@ -202,7 +202,7 @@ struct EventCard: View {
                             .font(.footnote)
                     }
                     Spacer()
-                    TimeBadge(event.date)
+                    TimeBadge(for: event)
                 }
                 Text(event.description)
                     .lineLimit(3)
@@ -231,23 +231,26 @@ struct EventCard: View {
 
 struct TimeBadge: View {
     
-    private var date: Date?
+    private var event: Event
     
-    init(_ date: Date?) {
-        self.date = date
+    init(for event: Event) {
+        self.event = event
     }
     
     var body: some View {
-        Text(timeUntil(date))
+        Text(timeUntil(event))
             .padding(.horizontal)
             .padding(.vertical, 5)
             .font(.headline)
-            .timeBadgeStyle(TimeBadge.Style.from(date))
+            .timeBadgeStyle(TimeBadge.Style.from(event))
             .clipShape(Capsule())
     }
     
-    private func timeUntil(_ date: Date?) -> String {
-        if let date = date {
+    private func timeUntil(_ event: Event) -> String {
+        if event.past {
+            return "Past"
+        }
+        if let date = event.date {
             if date.secondsFromNow < 60 { return "1m" }
             
             let minutes = date.minutesFromNow
@@ -271,6 +274,7 @@ extension TimeBadge {
     class Style {
         
         static let now = Style(backgroundColor: .red, foregroundColor: .white)
+        static let past = Style(backgroundColor: .gray, foregroundColor: .white)
         static let soon = Style(backgroundColor: .yellow, foregroundColor: .black)
         static let later = Style(backgroundColor: .green, foregroundColor: .black)
         
@@ -282,8 +286,11 @@ extension TimeBadge {
             self.foregroundColor = foregroundColor
         }
         
-        static func from(_ date: Date?) -> Style {
-            if let date = date {
+        static func from(_ event: Event) -> Style {
+            if event.past {
+                return .past
+            }
+            if let date = event.date {
                 if date.hoursFromNow < 24 {
                     return .soon
                 } else {

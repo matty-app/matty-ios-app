@@ -130,7 +130,7 @@ fileprivate struct EventDetails: View {
                             .font(.footnote)
                     }
                     Spacer()
-                    TimeBadge(event.date)
+                    TimeBadge(for: event)
                 }
                 Section("DESCRIPTION", value: event.description)
                 Section("DETAILS", value: event.details)
