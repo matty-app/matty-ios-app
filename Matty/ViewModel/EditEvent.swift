@@ -69,7 +69,9 @@ class EditEvent: ObservableObject {
     
     func delete() {
         if let event = event {
-            dataStore.delete(event)
+            Task {
+                await dataStore.delete(event)
+            }
         }
     }
     

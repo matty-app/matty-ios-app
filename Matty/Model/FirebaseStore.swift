@@ -8,7 +8,7 @@ protocol AnyDataStore {
     func fetchUserEvents() async -> [AnyEventEntity]
     func add(_ event: Event)
     func update(_ event: Event)
-    func delete(_ event: Event)
+    func delete(_ event: Event) async
 }
 
 class FirebaseStore: AnyDataStore {
@@ -128,10 +128,17 @@ class FirebaseStore: AnyDataStore {
         }
     }
     
-    func delete(_ event: Event) {
+    func delete(_ event: Event) async {
         let eventRef = ref(event)
         if let eventRef = eventRef {
-            eventRef.delete()
+            let batch = firestore.batch()
+            batch.deleteDocument(eventRef)
+            if let user = await fetchUser() {
+                batch.updateData([
+                    "events": FieldValue.arrayRemove([eventRef])
+                ], forDocument: user.ref)
+            }
+            try? await batch.commit()
         }
     }
     
