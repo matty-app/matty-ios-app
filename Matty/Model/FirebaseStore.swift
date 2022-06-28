@@ -6,6 +6,7 @@ protocol AnyDataStore {
     func fetchUserInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ())
     func fetchAllInterests(completionHandler: @escaping ([AnyInterestEntity]) -> ())
     func fetchUserEvents() async -> [AnyEventEntity]
+    func fetchRelevantEvents() async -> [AnyEventEntity]
     func add(_ event: Event)
     func update(_ event: Event)
     func delete(_ event: Event) async
@@ -46,6 +47,22 @@ class FirebaseStore: AnyDataStore {
             }
             completionHandler(self.allInterests)
         }
+    }
+    
+    func fetchRelevantEvents() async -> [AnyEventEntity] {
+        var events = [EventEntity]()
+        if let userEntity = await fetchUser() {
+            let userInterestRefs = userEntity.user.interests.compactMap { ref($0) }
+            let snapshot = try? await firestore.collection(.events).whereField("interest", in: userInterestRefs).getDocuments()
+            if let snapshot = snapshot {
+                for document in snapshot.documents {
+                    if let event = await eventEntity(from: document) {
+                        events.append(event)
+                    }
+                }
+            }
+        }
+        return events
     }
     
     func fetchUserEvents() async -> [AnyEventEntity] {
@@ -99,7 +116,7 @@ class FirebaseStore: AnyDataStore {
             "date": event.date ?? NSNull(),
             "public": event.isPublic,
             "withApproval": event.withApproval,
-            "creator": ref(event.creator)!,
+            "creator": userRef,
             "createdAt": Date.now,
             "participants": [userRef]
         ], forDocument: eventRef)
@@ -190,10 +207,18 @@ class FirebaseStore: AnyDataStore {
         guard let email = document["email"] as? String else { return nil }
         guard let events = document["events"] as? [DocumentReference] else { return nil }
         
+        var interests = [Interest]()
+        guard let interestRefs = document["interests"] as? [DocumentReference] else { return nil }
+        for interestRef in interestRefs {
+            guard let interestDoc = try? await interestRef.getDocument() else { continue }
+            guard let interest = InterestEntity.from(interestDoc)?.interest else { continue }
+            interests.append(interest)
+        }
+        
         return UserEntity(user: User(
             name: name,
             email: email,
-            interests: []
+            interests: interests
         ), events: events, ref: document.reference)
     }
 }
@@ -231,6 +256,10 @@ class StubDataStore: AnyDataStore {
     }
     
     func fetchUserEvents() async -> [AnyEventEntity] {
+        return userEvents
+    }
+    
+    func fetchRelevantEvents() async -> [AnyEventEntity] {
         return userEvents
     }
     

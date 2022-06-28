@@ -4,6 +4,7 @@ import Foundation
 class EventFeed: ObservableObject {
     
     @Published var userEvents = [Event]()
+    @Published var relevantEvents = [Event]()
     @Published var selectedEvent: Event?
     @Published var showNewEventScreen = false
     @Published var showEventDetailsScreen = false
@@ -14,6 +15,7 @@ class EventFeed: ObservableObject {
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
         loadUserEvents()
+        loadRelevantEvents()
     }
     
     func addEvent() {
@@ -53,6 +55,12 @@ class EventFeed: ObservableObject {
                 let pastEvent = userEvents.removeFirst()
                 userEvents.append(pastEvent)
             }
+        }
+    }
+    
+    func loadRelevantEvents() {
+        Task {
+            relevantEvents = await dataStore.fetchRelevantEvents().map { $0.event }
         }
     }
     
