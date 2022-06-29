@@ -12,6 +12,19 @@ struct EventFeedView: View {
             EventsViewTab()
             ProfileTabView()
         }
+        .fullScreenCover(isPresented: $eventFeed.showEventDetailsScreen) {
+            if let selectedEvent = Binding($eventFeed.selectedEvent) {
+                EventDetails(for: selectedEvent)
+                .onDisappear {
+                    eventFeed.onEventDetailsDisappear()
+                }
+                .fullScreenCover(isPresented: $eventFeed.showEditEventScreen) {
+                    ExistingEventView()
+                }
+            } else {
+                EmptyView()
+            }
+        }
     }
     
     func SearchViewTab() -> some View {
@@ -36,11 +49,108 @@ struct EventFeedView: View {
                     Label("Profile", systemImage: "person.crop.circle")
                 }.tag(2)
     }
+    
+    func ExistingEventView() -> some View {
+        let vm = EditEvent(eventFeed.selectedEvent)
+        return NavigationView {
+            EditEventView(vm: vm) { event in
+                eventFeed.onExistingEventSave(updatedEvent: event)
+            } onDelete: {
+                eventFeed.onExistingEventDelete()
+            }
+            .toolbar {
+                ToolbarItem {
+                    CloseButton {
+                        eventFeed.closeEditEventScreen()
+                    }
+                }
+            }
+        }
+    }
+}
+
+fileprivate struct EventDetails: View {
+    
+    @EnvironmentObject private var eventFeed: EventFeed
+    
+    @Binding private var event: Event
+    
+    init(for event: Binding<Event>) {
+        _event = event
+    }
+    
+    var body: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.system(size: 40))
+                    VStack(alignment: .leading) {
+                        Text(event.name)
+                            .font(.headline)
+                        Text("\(event.interest.emoji) \(event.interest.name)")
+                            .font(.footnote)
+                    }
+                    Spacer()
+                    TimeBadge(for: event)
+                }
+                Section("DESCRIPTION", value: event.description)
+                Section("DETAILS", value: event.details)
+                Section("LOCATION", value: event.locationName)
+                Section("DATE & TIME", value: event.formattedDatetime)
+            }
+            .padding()
+            Spacer()
+            HStack {
+                EditEventButton()
+                CloseDetailsButton()
+            }.padding(.horizontal)
+        }
+    }
+    
+    func Section(_ header: String, value: String) -> some View {
+        Group {
+            Text(header)
+                .font(.subheadline)
+                .foregroundColor(.gray)
+                .padding(.top)
+            Text(value)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    func EditEventButton() -> some View {
+        Button {
+            eventFeed.editEvent()
+        } label: {
+            Label("Edit", systemImage: "pencil")
+                .font(.headline)
+                .padding()
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(.regularMaterial)
+                .foregroundColor(.black)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
+    
+    func CloseDetailsButton() -> some View {
+        Button {
+            eventFeed.closeEventDetails()
+        } label: {
+            Label("Close", systemImage: "xmark")
+                .font(.headline)
+                .padding()
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(.blue)
+                .foregroundColor(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
 }
 
 struct EventFeedView_Previews: PreviewProvider {
     static var previews: some View {
         EventFeedView()
-            .environmentObject(EventFeed())
+            .environmentObject(EventFeed(dataStore: StubDataStore()))
     }
 }

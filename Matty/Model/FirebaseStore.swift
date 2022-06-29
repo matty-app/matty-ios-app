@@ -39,7 +39,7 @@ class FirebaseStore: AnyDataStore {
             } else {
                 if let querySnapshot = querySnapshot {
                     for document in querySnapshot.documents {
-                        if let interest = InterestEntity.from(document) {
+                        if let interest = self.interestEntity(from: document) {
                             self.allInterests.append(interest)
                         }
                     }
@@ -171,6 +171,13 @@ class FirebaseStore: AnyDataStore {
         userEvents.first { $0.event.id == event.id }?.ref
     }
     
+    private func interestEntity(from document: DocumentSnapshot) -> InterestEntity? {
+        guard let name = document["name"] as? String else { return nil }
+        let emoji = document["emoji"] as? String ?? ""
+        let interest = Interest(name: name, emoji: emoji)
+        return InterestEntity(interest: interest, ref: document.reference)
+    }
+    
     private func eventEntity(from document: DocumentSnapshot) async -> EventEntity? {
         let id = document.documentID
         guard let name = document["name"] as? String else { return nil }
@@ -181,10 +188,11 @@ class FirebaseStore: AnyDataStore {
         let date = (document["date"] as? Timestamp)?.dateValue()
         guard let isPublic = document["public"] as? Bool else { return nil }
         guard let withApproval = document["withApproval"] as? Bool else { return nil }
+        guard let creator = await userEntity(ref: document["creator"])?.user else { return nil }
         guard let createdAt = (document["createdAt"] as? Timestamp)?.dateValue() else { return nil }
         guard let interestRef = document["interest"] as? DocumentReference else { return nil }
         guard let interestDoc = try? await interestRef.getDocument() else { return nil }
-        guard let interest = InterestEntity.from(interestDoc)?.interest else { return nil }
+        guard let interest = interestEntity(from: interestDoc)?.interest else { return nil }
         
         return EventEntity(event: Event(
             id: id,
@@ -197,7 +205,7 @@ class FirebaseStore: AnyDataStore {
             date: date,
             isPublic: isPublic,
             withApproval: withApproval,
-            creator: .dev,
+            creator: creator,
             createdAt: createdAt
         ), ref: document.reference)
     }
@@ -211,7 +219,7 @@ class FirebaseStore: AnyDataStore {
         guard let interestRefs = document["interests"] as? [DocumentReference] else { return nil }
         for interestRef in interestRefs {
             guard let interestDoc = try? await interestRef.getDocument() else { continue }
-            guard let interest = InterestEntity.from(interestDoc)?.interest else { continue }
+            guard let interest = interestEntity(from: interestDoc)?.interest else { continue }
             interests.append(interest)
         }
         
@@ -220,6 +228,16 @@ class FirebaseStore: AnyDataStore {
             email: email,
             interests: interests
         ), events: events, ref: document.reference)
+    }
+    
+    private func userEntity(ref: Any?) async -> UserEntity? {
+        guard let document = await document(ref: ref) else { return nil }
+        return await userEntity(from: document)
+    }
+    
+    private func document(ref: Any?) async -> DocumentSnapshot? {
+        guard let ref = ref as? DocumentReference else { return nil }
+        return try? await ref.getDocument()
     }
 }
 
@@ -296,16 +314,6 @@ extension Array where Element == String {
             entities.append(StubInterestEntity(interest: interest))
         }
         return entities
-    }
-}
-
-extension InterestEntity {
-    
-    static func from(_ document: DocumentSnapshot) -> InterestEntity? {
-        guard let name = document["name"] as? String else { return nil }
-        let emoji = document["emoji"] as? String ?? ""
-        let interest = Interest(name: name, emoji: emoji)
-        return InterestEntity(interest: interest, ref: document.reference)
     }
 }
 
