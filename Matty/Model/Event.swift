@@ -14,12 +14,17 @@ struct Event: Hashable, Identifiable {
     let withApproval: Bool
     let creator: User
     let createdAt: Date
+    let userStatus: UserStatus
 }
 
 extension Event {
     
     var past: Bool {
         return (date ?? .now) < .now
+    }
+    
+    enum UserStatus {
+        case owner, participant, none
     }
 }
 

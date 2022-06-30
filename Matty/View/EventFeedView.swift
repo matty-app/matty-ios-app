@@ -102,7 +102,14 @@ fileprivate struct EventDetails: View {
             .padding()
             Spacer()
             HStack {
-                EditEventButton()
+                switch event.userStatus {
+                case .owner:
+                    EditEventButton()
+                case .participant:
+                    LeaveEventButton()
+                case .none:
+                    JoinEventButton()
+                }
                 CloseDetailsButton()
             }.padding(.horizontal)
         }
@@ -129,6 +136,34 @@ fileprivate struct EventDetails: View {
                 .frame(maxWidth: .infinity, minHeight: 50)
                 .background(.regularMaterial)
                 .foregroundColor(.black)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
+    
+    func JoinEventButton() -> some View {
+        Button {
+            eventFeed.joinEvent()
+        } label: {
+            Label("Join", systemImage: "person.2.fill")
+                .font(.headline)
+                .padding()
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(.regularMaterial)
+                .foregroundColor(.green)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
+    
+    func LeaveEventButton() -> some View {
+        Button {
+            eventFeed.leaveEvent()
+        } label: {
+            Label("Leave", systemImage: "person.fill.xmark")
+                .font(.headline)
+                .padding()
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(.regularMaterial)
+                .foregroundColor(.red)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }

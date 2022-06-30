@@ -97,7 +97,8 @@ class EditEvent: ObservableObject {
             isPublic: isPublic,
             withApproval: approvalRequired,
             creator: .dev,
-            createdAt: event?.createdAt ?? .now
+            createdAt: event?.createdAt ?? .now,
+            userStatus: .owner
         )
     }
 }

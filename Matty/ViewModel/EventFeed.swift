@@ -47,6 +47,14 @@ class EventFeed: ObservableObject {
         showEditEventScreen = true
     }
     
+    func joinEvent() {
+        //TODO: -
+    }
+    
+    func leaveEvent() {
+        //TODO: -
+    }
+    
     func loadUserEvents() {
         Task {
             let events = await dataStore.fetchUserEvents().map { $0.event }

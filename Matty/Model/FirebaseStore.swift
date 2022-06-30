@@ -56,7 +56,7 @@ class FirebaseStore: AnyDataStore {
             let snapshot = try? await firestore.collection(.events).whereField("interest", in: userInterestRefs).getDocuments()
             if let snapshot = snapshot {
                 for document in snapshot.documents {
-                    if let event = await eventEntity(from: document) {
+                    if let event = await eventEntity(from: document, relevant: true) {
                         events.append(event)
                     }
                 }
@@ -70,7 +70,7 @@ class FirebaseStore: AnyDataStore {
         if let user = await fetchUser() {
             for eventRef in user.events {
                 if let snapshot = try? await eventRef.getDocument() {
-                    if let event = await eventEntity(from: snapshot) {
+                    if let event = await eventEntity(from: snapshot, relevant: false) {
                         userEvents.append(event)
                     }
                 }
@@ -178,7 +178,7 @@ class FirebaseStore: AnyDataStore {
         return InterestEntity(interest: interest, ref: document.reference)
     }
     
-    private func eventEntity(from document: DocumentSnapshot) async -> EventEntity? {
+    private func eventEntity(from document: DocumentSnapshot, relevant: Bool) async -> EventEntity? {
         let id = document.documentID
         guard let name = document["name"] as? String else { return nil }
         guard let description = document["description"] as? String else { return nil }
@@ -193,6 +193,11 @@ class FirebaseStore: AnyDataStore {
         guard let interestRef = document["interest"] as? DocumentReference else { return nil }
         guard let interestDoc = try? await interestRef.getDocument() else { return nil }
         guard let interest = interestEntity(from: interestDoc)?.interest else { return nil }
+        guard let user = await fetchUser()?.user else { return nil }
+        var userStatus = Event.UserStatus.none
+        if !relevant {
+            userStatus = (creator == user) ? .owner : .participant
+        }
         
         return EventEntity(event: Event(
             id: id,
@@ -206,7 +211,8 @@ class FirebaseStore: AnyDataStore {
             isPublic: isPublic,
             withApproval: withApproval,
             creator: creator,
-            createdAt: createdAt
+            createdAt: createdAt,
+            userStatus: userStatus
         ), ref: document.reference)
     }
     
@@ -300,7 +306,8 @@ class StubDataStore: AnyDataStore {
             isPublic: true,
             withApproval: false,
             creator: .dev,
-            createdAt: .now
+            createdAt: .now,
+            userStatus: .owner
         ))
     }
 }
