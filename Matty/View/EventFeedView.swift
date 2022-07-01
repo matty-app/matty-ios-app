@@ -134,8 +134,8 @@ fileprivate struct EventDetails: View {
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .background(.regularMaterial)
-                .foregroundColor(.black)
+                .background(.blue)
+                .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
@@ -148,8 +148,8 @@ fileprivate struct EventDetails: View {
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .background(.regularMaterial)
-                .foregroundColor(.green)
+                .background(.green)
+                .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
@@ -162,8 +162,8 @@ fileprivate struct EventDetails: View {
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .background(.regularMaterial)
-                .foregroundColor(.red)
+                .background(.red)
+                .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
@@ -176,8 +176,8 @@ fileprivate struct EventDetails: View {
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .background(.blue)
-                .foregroundColor(.white)
+                .background(.regularMaterial)
+                .foregroundColor(.black)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }

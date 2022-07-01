@@ -48,11 +48,20 @@ class EventFeed: ObservableObject {
     }
     
     func joinEvent() {
-        //TODO: -
+        if let selectedEvent = selectedEvent {
+            dataStore.join(selectedEvent)
+            self.selectedEvent?.userStatus = .participant
+            userEvents.append(self.selectedEvent!)
+            relevantEvents = relevantEvents.filter { $0 != selectedEvent }
+        }
     }
     
     func leaveEvent() {
-        //TODO: -
+        if let selectedEvent = selectedEvent {
+            dataStore.leave(selectedEvent)
+            self.selectedEvent?.userStatus = .none
+            userEvents = userEvents.filter { $0 != selectedEvent }
+        }
     }
     
     func loadUserEvents() {

@@ -8,6 +8,8 @@ protocol AnyDataStore {
     func fetchUserEvents() async -> [AnyEventEntity]
     func fetchRelevantEvents() async -> [AnyEventEntity]
     func add(_ event: Event)
+    func join(_ event: Event)
+    func leave(_ event: Event)
     func update(_ event: Event)
     func delete(_ event: Event) async
 }
@@ -56,8 +58,10 @@ class FirebaseStore: AnyDataStore {
             let snapshot = try? await firestore.collection(.events).whereField("interest", in: userInterestRefs).getDocuments()
             if let snapshot = snapshot {
                 for document in snapshot.documents {
-                    if let event = await eventEntity(from: document, relevant: true) {
-                        events.append(event)
+                    if let eventEntity = await eventEntity(from: document, relevant: true) {
+                        if await !userParticipates(in: eventEntity.event) {
+                            events.append(eventEntity)
+                        }
                     }
                 }
             }
@@ -77,6 +81,29 @@ class FirebaseStore: AnyDataStore {
             }
         }
         return userEvents
+    }
+    
+    private func userParticipates(in event: Event) async -> Bool {
+        let participants = await participants(of: event).map { $0.user }
+        if let user = await fetchUser()?.user {
+            return participants.contains(user)
+        }
+        return false
+    }
+    
+    private func participants(of event: Event) async -> [UserEntity] {
+        var users = [UserEntity]()
+        if let document = try? await firestore.collection(.events).document(event.id).getDocument() {
+            guard let participants = document["participants"] as? [DocumentReference] else { return [] }
+            for participant in participants {
+                if let user = await userEntity(ref: participant) {
+                    users.append(user)
+                }
+            }
+            return users
+        } else {
+            return []
+        }
     }
     
     private func fetchUser() async -> UserEntity? {
@@ -124,6 +151,38 @@ class FirebaseStore: AnyDataStore {
         batch.updateData([
             "events": FieldValue.arrayUnion([eventRef])
         ], forDocument: userRef)
+        
+        batch.commit()
+    }
+    
+    func join(_ event: Event) {
+        let batch = firestore.batch()
+        let userRef = firestore.collection(.users).document("dev")
+        let eventRef = firestore.collection(.events).document(event.id)
+        
+        batch.updateData([
+            "events": FieldValue.arrayUnion([eventRef])
+        ], forDocument: userRef)
+        
+        batch.updateData([
+            "participants": FieldValue.arrayUnion([userRef])
+        ], forDocument: eventRef)
+        
+        batch.commit()
+    }
+    
+    func leave(_ event: Event) {
+        let batch = firestore.batch()
+        let userRef = firestore.collection(.users).document("dev")
+        let eventRef = firestore.collection(.events).document(event.id)
+        
+        batch.updateData([
+            "events": FieldValue.arrayRemove([eventRef])
+        ], forDocument: userRef)
+        
+        batch.updateData([
+            "participants": FieldValue.arrayRemove([userRef])
+        ], forDocument: eventRef)
         
         batch.commit()
     }
@@ -288,6 +347,10 @@ class StubDataStore: AnyDataStore {
     }
     
     func add(_ event: Event) { }
+    
+    func join(_ event: Event) { }
+    
+    func leave(_ event: Event) { }
     
     func update(_ event: Event) { }
     
