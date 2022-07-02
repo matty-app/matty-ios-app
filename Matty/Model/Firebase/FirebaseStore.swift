@@ -44,13 +44,14 @@ class FirebaseStore: AnyDataStore {
     func fetchRelevantEvents() async -> [Event] {
         var events = [Event]()
         if let userEntity = await fetchUser() {
-            let snapshot = try? await firestore.collection(.events).whereField("interest", in: userEntity.interests).getDocuments()
-            if let snapshot = snapshot {
-                for document in snapshot.documents {
-                    if let event = try? await document.data(as: EventEntity.self).unwrap() {
-                        if event.userStatus == .none {
-                            events.append(event)
-                        }
+            let documents = await firestore
+                .collection(.events)
+                .whereField("interestRef", in: userEntity.interests)
+                .getDocuments(as: EventEntity.self)
+            for document in documents {
+                if let event = await document?.unwrap() {
+                    if event.userStatus == .none {
+                        events.append(event)
                     }
                 }
             }
@@ -78,20 +79,19 @@ class FirebaseStore: AnyDataStore {
     
     func add(_ event: Event) {
         let batch = firestore.batch()
-        let userRef = firestore.collection(.users).document("dev")
         let eventRef = firestore.collection(.events).document()
         
         batch.setData([
             "name": event.name,
             "description": event.description,
             "details": event.details,
-            "interest": ref(event.interest),
+            "interestRef": ref(event.interest),
             "coordinates": event.coordinates?.toGeoPoint() ?? NSNull(),
             "locationName": event.locationName,
             "date": event.date ?? NSNull(),
             "public": event.isPublic,
             "withApproval": event.withApproval,
-            "creator": userRef,
+            "creatorRef": userRef,
             "createdAt": Date.now,
             "participants": [userRef]
         ], forDocument: eventRef)
@@ -105,7 +105,6 @@ class FirebaseStore: AnyDataStore {
     
     func join(_ event: Event) {
         let batch = firestore.batch()
-        let userRef = firestore.collection(.users).document("dev")
         let eventRef = firestore.collection(.events).document(event.id)
         
         batch.updateData([
@@ -121,7 +120,6 @@ class FirebaseStore: AnyDataStore {
     
     func leave(_ event: Event) {
         let batch = firestore.batch()
-        let userRef = firestore.collection(.users).document("dev")
         let eventRef = firestore.collection(.events).document(event.id)
         
         batch.updateData([
@@ -141,7 +139,7 @@ class FirebaseStore: AnyDataStore {
             "name": event.name,
             "description": event.description,
             "details": event.details,
-            "interest": ref(event.interest),
+            "interestRef": ref(event.interest),
             "coordinates": event.coordinates?.toGeoPoint() ?? NSNull(),
             "locationName": event.locationName,
             "date": event.date ?? NSNull(),
@@ -166,9 +164,13 @@ class FirebaseStore: AnyDataStore {
 
 extension FirebaseStore {
     
+    var userRef: DocumentReference {
+        return firestore.collection(.users).document("dev")
+    }
+    
     private func fetchUser() async -> UserEntity? {
         //TODO: Fetch current user instead dev
-        return try? await firestore.collection(.users).document("dev").getDocument(as: UserEntity.self)
+        return try? await userRef.getDocument(as: UserEntity.self)
     }
     
     private func fetchAllUsers() async -> [UserEntity] {
@@ -239,7 +241,7 @@ extension Firestore {
     }
 }
 
-extension CollectionReference {
+extension Query {
     
     func getDocuments<T: Decodable>(as: T.Type) async -> [T?] {
         var result = [T?]()

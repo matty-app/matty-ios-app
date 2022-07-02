@@ -8,13 +8,13 @@ extension FirebaseStore {
         let name: String
         let description: String
         let details: String
-        let interest: DocumentReference
+        let interestRef: DocumentReference
         let coordinates: GeoPoint?
         let locationName: String
         let date: Date?
         let `public`: Bool
         let withApproval: Bool
-        let creator: DocumentReference
+        let creatorRef: DocumentReference
         let createdAt: Date
         let participants: [DocumentReference]
     }
@@ -23,25 +23,24 @@ extension FirebaseStore {
 extension FirebaseStore.EventEntity {
     
     //TODO: Get current user
-    func userRef() -> DocumentReference {
+    private var userRef: DocumentReference {
         return Firestore.firestore().collection(.users).document("dev")
     }
     
     func interest() async -> Interest? {
-        return try? await interest.getDocument(as: FirebaseStore.InterestEntity.self).unwrap()
+        return try? await interestRef.getDocument(as: FirebaseStore.InterestEntity.self).unwrap()
     }
     
     func creator() async -> User? {
-        return try? await creator.getDocument(as: FirebaseStore.UserEntity.self).unwrap()
+        return try? await creatorRef.getDocument(as: FirebaseStore.UserEntity.self).unwrap()
     }
     
     func unwrap() async -> Event? {
         guard let id = id else { return nil }
         guard let interest = await interest() else { return nil }
         guard let creator = await creator() else { return nil }
-        let userRef = userRef()
         var userStatus = Event.UserStatus.none
-        if self.creator == userRef {
+        if self.creatorRef == userRef {
             userStatus = .owner
         } else if participants.contains(userRef) {
             userStatus = .participant
