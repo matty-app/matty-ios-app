@@ -1,24 +1,14 @@
 import FirebaseFirestore
 
-struct Interest: Hashable {
+struct Interest: Hashable, Identifiable {
+    let id: String
     let name: String
     let emoji: String
     
-    init(name: String, emoji: String = "") {
+    init(id: String, name: String, emoji: String = "") {
+        self.id = id
         self.name = name
         self.emoji = emoji
     }
 }
 
-protocol AnyInterestEntity {
-    var interest: Interest { get }
-}
-
-struct InterestEntity: AnyInterestEntity {
-    let interest: Interest
-    let ref: DocumentReference
-}
-
-struct StubInterestEntity: AnyInterestEntity {
-    let interest: Interest
-}

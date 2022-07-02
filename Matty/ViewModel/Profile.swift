@@ -1,6 +1,7 @@
 import SwiftUI
 import Photos
 
+@MainActor
 class Profile: ObservableObject {
     
     @Published var name = "Mark Z"
@@ -37,9 +38,10 @@ class Profile: ObservableObject {
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
-        dataStore.fetchUserInterests { entities in
-            self.userInterests = entities.map { SelectableInterest(selected: true, value: $0.interest ) }
-            self.loadAllInterests()
+        Task {
+            loadAllInterests()
+            let interests = await dataStore.fetchUserInterests()
+            userInterests = interests.map { SelectableInterest(selected: true, value: $0 ) }
         }
         loadImage()
     }
@@ -113,12 +115,13 @@ class Profile: ObservableObject {
     }
     
     private func loadAllInterests() {
-        allInterests = []
-        dataStore.fetchAllInterests { entities in
+        Task {
+            allInterests = []
+            let interests = await dataStore.fetchAllInterests()
             let userInterests = self.userInterests.extractValues()
-            entities.forEach { entity in
-                let selected = userInterests.contains(entity.interest)
-                self.allInterests.append(SelectableInterest(selected: selected, value: entity.interest))
+            interests.forEach { interest in
+                let selected = userInterests.contains(interest)
+                allInterests.append(SelectableInterest(selected: selected, value: interest))
             }
         }
     }

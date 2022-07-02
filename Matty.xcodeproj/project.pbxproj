@@ -30,6 +30,10 @@
 		F506979028397F0600114C2E /* MapKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F506978F28397F0600114C2E /* MapKitExtensions.swift */; };
 		F50697922839801D00114C2E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F50697912839801D00114C2E /* GoogleService-Info.plist */; };
 		F50B7E472844E64B00E52EB8 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50B7E462844E64B00E52EB8 /* ImagePicker.swift */; };
+		F50E09E5287065F900EBF700 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50E09E4287065F900EBF700 /* UserEntity.swift */; };
+		F50E09E7287067DC00EBF700 /* InterestEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50E09E6287067DC00EBF700 /* InterestEntity.swift */; };
+		F50E09E9287070A800EBF700 /* StubDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50E09E8287070A800EBF700 /* StubDataStore.swift */; };
+		F50E09EB287086DC00EBF700 /* EventEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50E09EA287086DC00EBF700 /* EventEntity.swift */; };
 		F58B749528397A3400C90B6E /* MattyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F58B749428397A3400C90B6E /* MattyApp.swift */; };
 		F58B749928397A3400C90B6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749828397A3400C90B6E /* Assets.xcassets */; };
 		F58B749C28397A3400C90B6E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F58B749B28397A3400C90B6E /* Preview Assets.xcassets */; };
@@ -65,6 +69,10 @@
 		F506978F28397F0600114C2E /* MapKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapKitExtensions.swift; sourceTree = "<group>"; };
 		F50697912839801D00114C2E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F50B7E462844E64B00E52EB8 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		F50E09E4287065F900EBF700 /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
+		F50E09E6287067DC00EBF700 /* InterestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterestEntity.swift; sourceTree = "<group>"; };
+		F50E09E8287070A800EBF700 /* StubDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubDataStore.swift; sourceTree = "<group>"; };
+		F50E09EA287086DC00EBF700 /* EventEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEntity.swift; sourceTree = "<group>"; };
 		F58B749128397A3400C90B6E /* Matty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F58B749428397A3400C90B6E /* MattyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MattyApp.swift; sourceTree = "<group>"; };
 		F58B749828397A3400C90B6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -93,7 +101,7 @@
 		F506976128397CD500114C2E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F506976228397CEF00114C2E /* FirebaseStore.swift */,
+				F50E09E3287065CF00EBF700 /* Firebase */,
 				F506976428397D0000114C2E /* Interest.swift */,
 				F5AA67F8284A9348005DABD5 /* Event.swift */,
 				F5E606162854BC9900425535 /* User.swift */,
@@ -175,6 +183,18 @@
 				F5D80871285268340094BC07 /* DateExtensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F50E09E3287065CF00EBF700 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				F506976228397CEF00114C2E /* FirebaseStore.swift */,
+				F50E09E8287070A800EBF700 /* StubDataStore.swift */,
+				F50E09E4287065F900EBF700 /* UserEntity.swift */,
+				F50E09EA287086DC00EBF700 /* EventEntity.swift */,
+				F50E09E6287067DC00EBF700 /* InterestEntity.swift */,
+			);
+			path = Firebase;
 			sourceTree = "<group>";
 		};
 		F58B748828397A3400C90B6E = {
@@ -297,6 +317,7 @@
 				F506977128397D7D00114C2E /* EmailCheckView.swift in Sources */,
 				F506978128397E3300114C2E /* InterestCollection.swift in Sources */,
 				F5EC7CE8283E861C0094E5D8 /* EventsView.swift in Sources */,
+				F50E09E7287067DC00EBF700 /* InterestEntity.swift in Sources */,
 				F506976528397D0000114C2E /* Interest.swift in Sources */,
 				F506977828397DD500114C2E /* EditEventInterestSelectionView.swift in Sources */,
 				F506978628397E6900114C2E /* EventFeed.swift in Sources */,
@@ -307,10 +328,12 @@
 				F506979028397F0600114C2E /* MapKitExtensions.swift in Sources */,
 				F5AA67F9284A9348005DABD5 /* Event.swift in Sources */,
 				F506976B28397D4A00114C2E /* AuthView.swift in Sources */,
+				F50E09E5287065F900EBF700 /* UserEntity.swift in Sources */,
 				F5EC7CE6283E7A2F0094E5D8 /* SearchView.swift in Sources */,
 				F506978428397E5B00114C2E /* Auth.swift in Sources */,
 				F50B7E472844E64B00E52EB8 /* ImagePicker.swift in Sources */,
 				F506978D28397ED400114C2E /* MapSearchService.swift in Sources */,
+				F50E09E9287070A800EBF700 /* StubDataStore.swift in Sources */,
 				F506978828397E7500114C2E /* EditEvent.swift in Sources */,
 				F506977328397D9100114C2E /* UserInterestsSelectionView.swift in Sources */,
 				F5EC7CEC28415BBF0094E5D8 /* Profile.swift in Sources */,
@@ -319,6 +342,7 @@
 				F5D80872285268340094BC07 /* DateExtensions.swift in Sources */,
 				F58B749528397A3400C90B6E /* MattyApp.swift in Sources */,
 				F506977A28397DEB00114C2E /* EditEventLocationSelectionView.swift in Sources */,
+				F50E09EB287086DC00EBF700 /* EventEntity.swift in Sources */,
 				F506976D28397D5C00114C2E /* SignUpView.swift in Sources */,
 				F506977C28397DFA00114C2E /* EditEventDatetimeSelectionView.swift in Sources */,
 				F506977628397DC700114C2E /* EditEventView.swift in Sources */,

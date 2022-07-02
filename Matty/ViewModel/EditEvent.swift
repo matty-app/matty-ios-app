@@ -54,8 +54,8 @@ class EditEvent: ObservableObject {
             self.isNew = true
         }
         self.dataStore = dataStore
-        dataStore.fetchAllInterests { entities in
-            self.availableInterests = entities.map { $0.interest }
+        Task {
+            availableInterests = await dataStore.fetchAllInterests()
         }
     }
     

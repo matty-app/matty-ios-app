@@ -158,18 +158,28 @@ struct ProfileView: View {
     func ImageActions() -> ActionSheet {
         var buttons = [ActionSheet.Button]()
         if profile.hasImage {
-            buttons.append(.destructive(
-                Text("Remove"),
-                action: profile.removeImage
-            ))
+            buttons.append(RemoveImageButton())
         }
-        buttons.append(.default(
-            Text("Choose from Library"),
-            action: profile.chooseImage
-        ))
+        buttons.append(ChooseFromLibraryButton())
         buttons.append(.cancel())
         
         return ActionSheet(title: Text("Edit your profile image"), buttons: buttons)
+    }
+    
+    func RemoveImageButton() -> Alert.Button {
+        .destructive(
+            Text("Remove")
+        ) {
+            profile.removeImage()
+        }
+    }
+    
+    func ChooseFromLibraryButton() -> Alert.Button {
+        .default(
+            Text("Choose from Library")
+        ) {
+            profile.chooseImage()
+        }
     }
 }
 
