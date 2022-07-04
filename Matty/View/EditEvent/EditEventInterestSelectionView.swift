@@ -4,7 +4,7 @@ struct EditEventInterestSelectionView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     
-    @EnvironmentObject var editEvent: EditEvent
+    @EnvironmentObject var editEvent: EditEventViewModel
     
     var body: some View {
         List {
@@ -38,7 +38,7 @@ struct EditEventInterestSelectionView: View {
 
 struct EditEventInterestSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        let editEvent = EditEvent(dataStore: StubDataStore())
+        let editEvent = EditEventViewModel(dataStore: StubDataStore())
         EditEventInterestSelectionView()
             .environmentObject(editEvent)
     }

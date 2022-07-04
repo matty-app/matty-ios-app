@@ -4,13 +4,13 @@ struct EditEventView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     
-    @StateObject var vm: EditEvent
+    @StateObject var editEvent: EditEventViewModel
     
     private let onDelete: () -> ()
     private let onSubmit: (Event) -> ()
     
-    init(vm: EditEvent, onSubmit: @escaping (Event) -> (), onDelete: @escaping () -> () = {}) {
-        self._vm = StateObject(wrappedValue: vm)
+    init(vm: EditEventViewModel, onSubmit: @escaping (Event) -> (), onDelete: @escaping () -> () = {}) {
+        self._editEvent = StateObject(wrappedValue: vm)
         self.onDelete = onDelete
         self.onSubmit = onSubmit
     }
@@ -18,59 +18,59 @@ struct EditEventView: View {
     var body: some View {
         Form {
             Section("Name") {
-                TextEdit(placeholder: "Afternoon Cycling", text: $vm.name)
+                TextEdit(placeholder: "Afternoon Cycling", text: $editEvent.name)
             }
             Section("Description") {
-                TextEdit(placeholder: "I'd like to go for a ride in Butovo. Everybody is allowed. No restrictions.", text: $vm.description)
+                TextEdit(placeholder: "I'd like to go for a ride in Butovo. Everybody is allowed. No restrictions.", text: $editEvent.description)
             }
             Section("Private Details") {
-                TextEdit(placeholder: "The event starts at 18:30 near the Skobelevskaya metro station in Butovo.", text: $vm.privateDetails)
+                TextEdit(placeholder: "The event starts at 18:30 near the Skobelevskaya metro station in Butovo.", text: $editEvent.privateDetails)
             }
             Section {
-                Picker(name: "Interest", icon: "tag", value: vm.interest) {
+                Picker(name: "Interest", icon: "tag", value: editEvent.interest) {
                     EditEventInterestSelectionView()
                 }
-                Picker(name: "Location", icon: "location", value: vm.locationName) {
+                Picker(name: "Location", icon: "location", value: editEvent.locationName) {
                     EditEventLocationSelectionView { locationName, locationCoordinate in
-                        vm.locationName = locationName
-                        vm.locationCoordinate = locationCoordinate
+                        editEvent.locationName = locationName
+                        editEvent.locationCoordinate = locationCoordinate
                     }
                 }
-                Picker(name: "Date & Time", icon: "calendar", value: vm.datetime) {
+                Picker(name: "Date & Time", icon: "calendar", value: editEvent.datetime) {
                     EditEventDatetimeSelectionView()
                 }
             }
             Section {
-                Toggle("Public", isOn: $vm.isPublic)
-                Toggle("Approval", isOn: $vm.approvalRequired)
+                Toggle("Public", isOn: $editEvent.isPublic)
+                Toggle("Approval", isOn: $editEvent.approvalRequired)
             }
-            if !vm.isNew {
+            if !editEvent.isNew {
                 Section {
                     Button("Delete", role: .destructive) {
-                        vm.showDeleteConfirmation()
+                        editEvent.showDeleteConfirmation()
                     }
                 }
             }
-            FormActionButton(vm.isNew ? "Submit" : "Save") {
-                vm.submit()
-                onSubmit(vm.toEvent())
+            FormActionButton(editEvent.isNew ? "Submit" : "Save") {
+                editEvent.submit()
+                onSubmit(editEvent.toEvent())
             }
         }
-        .confirmationDialog("Are you sure?", isPresented: $vm.showDeleteConfirm) {
+        .confirmationDialog("Are you sure?", isPresented: $editEvent.showDeleteConfirm) {
             Button("Delete event", role: .destructive) {
-                vm.delete()
+                editEvent.delete()
                 onDelete()
             }
         } message: {
             Text("You cannot undo this action. Are you sure?")
         }
-        .navigationTitle(vm.isNew ? "New Event" : "Edit Event")
+        .navigationTitle(editEvent.isNew ? "New Event" : "Edit Event")
         .navigationBarTitleDisplayMode(.inline)
     }
     
     func Picker<Destination: View>(name: String, icon: String, value: String, @ViewBuilder destination: () -> Destination) -> some View {
         NavigationLink(
-            destination: destination().environmentObject(vm)
+            destination: destination().environmentObject(editEvent)
         ) {
             HStack {
                 Image(systemName: icon)
@@ -89,7 +89,7 @@ struct EditEventView_Preview: PreviewProvider {
     
     static var previews: some View {
         NavigationView {
-            let editEvent = EditEvent(dataStore: StubDataStore())
+            let editEvent = EditEventViewModel(dataStore: StubDataStore())
             EditEventView(vm: editEvent) { _ in }
         }
     }

@@ -2,8 +2,8 @@ import SwiftUI
 
 struct UserInterestsSelectionView: View {
     
-    @EnvironmentObject private var auth: Auth
-    @ObservedObject var vm: UserInterestsSelection
+    @EnvironmentObject private var auth: AuthViewModel
+    @ObservedObject var vm: UserInterestsSelectionViewModel
     
     var body: some View {
         VStack {
@@ -31,9 +31,9 @@ struct UserInterestsSelectionView: View {
 struct UserInterestsSelectionView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let vm = UserInterestsSelection(dataStore: StubDataStore())
+        let vm = UserInterestsSelectionViewModel(dataStore: StubDataStore())
         UserInterestsSelectionView(vm: vm)
-            .environmentObject(Auth())
+            .environmentObject(AuthViewModel())
     }
 }
 

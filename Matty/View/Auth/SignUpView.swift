@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SignUpView: View {
     
-    @EnvironmentObject var auth: Auth
+    @EnvironmentObject var auth: AuthViewModel
     
     var body: some View {
         NavigationView {
@@ -50,6 +50,6 @@ struct SignUpView_Previews: PreviewProvider {
     
     static var previews: some View {
         SignUpView()
-            .environmentObject(Auth())
+            .environmentObject(AuthViewModel())
     }
 }

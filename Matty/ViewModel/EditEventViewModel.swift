@@ -1,7 +1,8 @@
 import Foundation
 import CoreLocation
 
-class EditEvent: ObservableObject {
+@MainActor
+class EditEventViewModel: ObservableObject {
     
     @Published var name = ""
     @Published var description = ""

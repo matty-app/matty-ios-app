@@ -1,7 +1,7 @@
 import Foundation
 
 @MainActor
-class EventFeed: ObservableObject {
+class EventFeedViewModel: ObservableObject {
     
     @Published var userEvents = [Event]()
     @Published var relevantEvents = [Event]()

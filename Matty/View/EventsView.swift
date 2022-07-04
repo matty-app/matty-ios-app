@@ -2,7 +2,7 @@ import SwiftUI
 
 struct EventsView: View {
     
-    @EnvironmentObject private var eventFeed: EventFeed
+    @EnvironmentObject private var eventFeed: EventFeedViewModel
     
     var body: some View {
         NavigationView {
@@ -53,7 +53,7 @@ struct EventsView: View {
     }
     
     func NewEventView() -> some View {
-        let vm = EditEvent()
+        let vm = EditEventViewModel()
         return NavigationView {
             EditEventView(vm: vm) { _ in
                 eventFeed.onNewEventSubmit()
@@ -95,6 +95,6 @@ struct EventsView_Previews: PreviewProvider {
     
     static var previews: some View {
         EventsView()
-            .environmentObject(EventFeed(dataStore: StubDataStore()))
+            .environmentObject(EventFeedViewModel(dataStore: StubDataStore()))
     }
 }

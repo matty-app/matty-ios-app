@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @ObservedObject var profile: Profile
+    @ObservedObject var profile: ProfileViewModel
     
     var body: some View {
         NavigationView {
@@ -226,7 +226,7 @@ func withInstantTransaction(body: () -> ()) {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        let profile = Profile(dataStore: StubDataStore())
+        let profile = ProfileViewModel(dataStore: StubDataStore())
         ProfileView(profile: profile)
     }
 }

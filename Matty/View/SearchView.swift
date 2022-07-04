@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SearchView: View {
     
-    @EnvironmentObject private var eventFeed: EventFeed
+    @EnvironmentObject private var eventFeed: EventFeedViewModel
     
     @State private var searchText = ""
     
@@ -24,6 +24,6 @@ struct SearchView: View {
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
         SearchView()
-            .environmentObject(EventFeed(dataStore: StubDataStore()))
+            .environmentObject(EventFeedViewModel(dataStore: StubDataStore()))
     }
 }

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct EditEventDatetimeSelectionView: View {
     
-    @EnvironmentObject var editEvent: EditEvent
+    @EnvironmentObject var editEvent: EditEventViewModel
     
     var body: some View {
         Form {
@@ -17,7 +17,7 @@ struct EditEventDatetimeSelectionView: View {
 struct EditEventDatetimeSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            let editEvent = EditEvent(dataStore: StubDataStore())
+            let editEvent = EditEventViewModel(dataStore: StubDataStore())
             EditEventDatetimeSelectionView()
                 .navigationBarTitleDisplayMode(.inline)
                 .environmentObject(editEvent)

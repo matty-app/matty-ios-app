@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AuthView: View {
     
-    @EnvironmentObject var auth: Auth
+    @EnvironmentObject var auth: AuthViewModel
     
     var body: some View {
         Group {

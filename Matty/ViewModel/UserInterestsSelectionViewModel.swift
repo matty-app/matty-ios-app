@@ -1,6 +1,6 @@
 import Foundation
 
-class UserInterestsSelection: ObservableObject {
+class UserInterestsSelectionViewModel: ObservableObject {
     
     @Published var interests = [SelectableInterest]()
     

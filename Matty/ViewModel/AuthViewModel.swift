@@ -1,6 +1,6 @@
 import SwiftUI
 
-class Auth: ObservableObject {
+class AuthViewModel: ObservableObject {
     
     @Published var name = ""
     @Published var email = ""

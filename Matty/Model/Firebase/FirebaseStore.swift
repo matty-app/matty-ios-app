@@ -135,12 +135,13 @@ class FirebaseStore: AnyDataStore {
     
     func update(_ event: Event) {
         let eventRef = ref(event)
+        let coordinates = event.coordinates?.toGeoPoint() ?? NSNull()
         eventRef.updateData([
             "name": event.name,
             "description": event.description,
             "details": event.details,
             "interestRef": ref(event.interest),
-            "coordinates": event.coordinates?.toGeoPoint() ?? NSNull(),
+            "coordinates": coordinates,
             "locationName": event.locationName,
             "date": event.date ?? NSNull(),
             "public": event.isPublic,

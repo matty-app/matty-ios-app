@@ -5,10 +5,12 @@ import FirebaseFirestore
 @main
 struct MattyApp: App {
     
-    @StateObject var auth = Auth()
-    @StateObject var eventFeed = EventFeed()
+    @StateObject var auth: AuthViewModel
+    @StateObject var eventFeed: EventFeedViewModel
     
     init() {
+        _auth = StateObject(wrappedValue: AuthViewModel())
+        _eventFeed = StateObject(wrappedValue: EventFeedViewModel())
         FirebaseApp.configure()
     }
     

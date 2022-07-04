@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SignInView: View {
     
-    @EnvironmentObject var auth: Auth
+    @EnvironmentObject var auth: AuthViewModel
     
     var body: some View {
         VStack {
@@ -34,6 +34,6 @@ struct SignInView: View {
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
         SignInView()
-            .environmentObject(Auth())
+            .environmentObject(AuthViewModel())
     }
 }

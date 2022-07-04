@@ -2,7 +2,7 @@ import SwiftUI
 
 struct EventFeedView: View {
     
-    @EnvironmentObject private var eventFeed: EventFeed
+    @EnvironmentObject private var eventFeed: EventFeedViewModel
     
     @State private var selectedTab = 0
     
@@ -42,7 +42,7 @@ struct EventFeedView: View {
     }
     
     func ProfileTabView() -> some View {
-        let profile = Profile(dataStore: FirebaseStore.shared)
+        let profile = ProfileViewModel(dataStore: FirebaseStore.shared)
         return
             ProfileView(profile: profile)
                 .tabItem {
@@ -51,7 +51,7 @@ struct EventFeedView: View {
     }
     
     func ExistingEventView() -> some View {
-        let vm = EditEvent(eventFeed.selectedEvent)
+        let vm = EditEventViewModel(eventFeed.selectedEvent)
         return NavigationView {
             EditEventView(vm: vm) { event in
                 eventFeed.onExistingEventSave(updatedEvent: event)
@@ -71,7 +71,7 @@ struct EventFeedView: View {
 
 fileprivate struct EventDetails: View {
     
-    @EnvironmentObject private var eventFeed: EventFeed
+    @EnvironmentObject private var eventFeed: EventFeedViewModel
     
     @Binding private var event: Event
     
@@ -186,6 +186,6 @@ fileprivate struct EventDetails: View {
 struct EventFeedView_Previews: PreviewProvider {
     static var previews: some View {
         EventFeedView()
-            .environmentObject(EventFeed(dataStore: StubDataStore()))
+            .environmentObject(EventFeedViewModel(dataStore: StubDataStore()))
     }
 }

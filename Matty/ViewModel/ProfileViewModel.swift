@@ -2,7 +2,7 @@ import SwiftUI
 import Photos
 
 @MainActor
-class Profile: ObservableObject {
+class ProfileViewModel: ObservableObject {
     
     @Published var name = "Mark Z"
     @Published var email = "mark@fb.com"

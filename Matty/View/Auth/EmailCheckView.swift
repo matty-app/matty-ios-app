@@ -29,7 +29,7 @@ struct EmailCheckView: View {
         HStack(spacing: 0) {
             Text("Didn’t get the email? ")
             NavigationLink {
-                let vm = UserInterestsSelection()
+                let vm = UserInterestsSelectionViewModel()
                 UserInterestsSelectionView(vm: vm)
             } label: {
                 Text("Send again")
