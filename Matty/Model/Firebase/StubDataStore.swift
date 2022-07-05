@@ -25,6 +25,10 @@ class StubDataStore: AnyDataStore {
         return userEvents
     }
     
+    func fetchEvents(by interest: Interest) async -> [Event] {
+        return Array(userEvents.prefix(1))
+    }
+    
     func add(_ event: Event) { }
     
     func join(_ event: Event) { }

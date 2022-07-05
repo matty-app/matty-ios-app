@@ -8,6 +8,7 @@ protocol AnyDataStore {
     func fetchAllInterests() async -> [Interest]
     func fetchUserEvents() async -> [Event]
     func fetchRelevantEvents() async -> [Event]
+    func fetchEvents(by interest: Interest) async -> [Event]
     func add(_ event: Event)
     func join(_ event: Event)
     func leave(_ event: Event)
@@ -75,6 +76,22 @@ class FirebaseStore: AnyDataStore {
             }
         }
         return result
+    }
+    
+    func fetchEvents(by interest: Interest) async -> [Event] {
+        var events = [Event]()
+        if let userEntity = await fetchUser() {
+            let documents = await firestore
+                .collection(.events)
+                .whereField("interestRef", isEqualTo: ref(interest))
+                .getDocuments(as: EventEntity.self)
+            for document in documents {
+                if let event = await document?.unwrap() {
+                    events.append(event)
+                }
+            }
+        }
+        return events
     }
     
     func add(_ event: Event) {

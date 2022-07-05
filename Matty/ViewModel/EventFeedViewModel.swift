@@ -9,13 +9,41 @@ class EventFeedViewModel: ObservableObject {
     @Published var showNewEventScreen = false
     @Published var showEventDetailsScreen = false
     @Published var showEditEventScreen = false
+    @Published var showSuggestedInterests = false
+    @Published var suggestedInterests = [Interest]()
+    @Published var foundEvents = [Event]()
+    @Published var searchText = "" {
+        didSet {
+            searchInterests()
+            showSuggestedInterests = searchText.isEmpty ? false : true
+        }
+    }
+    @Published var searchEventsInProgress = false
     
     private let dataStore: AnyDataStore
+    private var allInterests = [Interest]()
     
     init(dataStore: AnyDataStore = FirebaseStore.shared) {
         self.dataStore = dataStore
+        loadAllInterests()
         loadUserEvents()
         loadRelevantEvents()
+    }
+    
+    var showRelevantEvents: Bool {
+        return searchText.isEmpty
+    }
+    
+    var showFoundEvents: Bool {
+        return !showRelevantEvents
+    }
+    
+    var noSuggestedInterests: Bool {
+        return suggestedInterests.isEmpty
+    }
+    
+    var noFoundEvents: Bool {
+        return foundEvents.isEmpty
     }
     
     func addEvent() {
@@ -64,6 +92,12 @@ class EventFeedViewModel: ObservableObject {
         }
     }
     
+    func loadAllInterests() {
+        Task {
+            allInterests = await dataStore.fetchAllInterests()
+        }
+    }
+    
     func loadUserEvents() {
         Task {
             let events = await dataStore.fetchUserEvents()
@@ -78,6 +112,17 @@ class EventFeedViewModel: ObservableObject {
     func loadRelevantEvents() {
         Task {
             relevantEvents = await dataStore.fetchRelevantEvents()
+        }
+    }
+    
+    func searchEvents(by interest: Interest) {
+        searchText = interest.name
+        foundEvents = []
+        searchEventsInProgress = true
+        showSuggestedInterests = false
+        Task {
+            foundEvents = await dataStore.fetchEvents(by: interest)
+            searchEventsInProgress = false
         }
     }
     
@@ -98,5 +143,9 @@ class EventFeedViewModel: ObservableObject {
         Task {
             closeEventDetails()
         }
+    }
+    
+    private func searchInterests() {
+        suggestedInterests = allInterests.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
 }
