@@ -78,16 +78,12 @@ extension LinearGradient {
 
 extension Event {
     
-    var formattedDate: String {
-        return (date ?? .now).formatted(date: .abbreviated, time: .omitted)
+    var formattedStartDate: String {
+        return startDate.formatted(date: .abbreviated, time: .omitted)
     }
     
     var formattedDatetime: String {
-        if let date = date {
-            return date.formatted()
-        } else {
-            return formattedDate
-        }
+        return startDate.formatted()
     }
 }
 

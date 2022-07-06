@@ -214,7 +214,7 @@ struct EventCard: View {
                         .foregroundColor(.gray)
                         .underline()
                     Spacer()
-                    Text(event.formattedDate)
+                    Text(event.formattedStartDate)
                         .font(.footnote)
                         .foregroundColor(.gray)
                 }
@@ -249,8 +249,11 @@ struct TimeBadge: View {
     private func timeUntil(_ event: Event) -> String {
         if event.past {
             return "Past"
-        }
-        if let date = event.date {
+        } else if event.started {
+            return "Now"
+        } else {
+            let date = event.startDate
+            
             if date.secondsFromNow < 60 { return "1m" }
             
             let minutes = date.minutesFromNow
@@ -263,8 +266,6 @@ struct TimeBadge: View {
             if years > 0 { return "\(years)y" }
             
             return "\(date.daysFromNow)d"
-        } else {
-            return "Now"
         }
     }
 }
@@ -289,15 +290,14 @@ extension TimeBadge {
         static func from(_ event: Event) -> Style {
             if event.past {
                 return .past
-            }
-            if let date = event.date {
-                if date.hoursFromNow < 24 {
+            } else if event.started {
+                return .now
+            } else {
+                if event.startDate.hoursFromNow < 24 {
                     return .soon
                 } else {
                     return .later
                 }
-            } else {
-                return .now
             }
         }
     }

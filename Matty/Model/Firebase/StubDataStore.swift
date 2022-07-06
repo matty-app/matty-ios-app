@@ -4,9 +4,9 @@ class StubDataStore: AnyDataStore {
     
     let interests = ["CS:GO", "Hiking", "Soccer", "Swimming", "Cycling", "Documentary", "Coding"].toStubInterests()
     let userEvents = [
-        eventEntity(name: "Afternoon Cycling", interest: Interest(id: "Cycling", name: "Cycling", emoji: "🚴"), descLength: 40, location: "Bitcevskij park", date: nil),
-        eventEntity(name: "CS:GO game", interest: Interest(id: "CS:GO", name: "CS:GO", emoji: "🎮"), descLength: 80, location: "de_dust2", date: .now.addingTimeInterval(900)),
-        eventEntity(name: "Soccer session", interest: Interest(id: "Soccer", name: "Soccer", emoji: "⚽️"), descLength: 160, location: "Moscow, Taganskaya street, 40-42", date: .now.addingTimeInterval(90000))
+        eventEntity(name: "Afternoon Cycling", interest: Interest(id: "Cycling", name: "Cycling", emoji: "🚴"), descLength: 40, location: "Bitcevskij park", startDate: .now),
+        eventEntity(name: "CS:GO game", interest: Interest(id: "CS:GO", name: "CS:GO", emoji: "🎮"), descLength: 80, location: "de_dust2", startDate: .now.addingTimeInterval(900)),
+        eventEntity(name: "Soccer session", interest: Interest(id: "Soccer", name: "Soccer", emoji: "⚽️"), descLength: 160, location: "Moscow, Taganskaya street, 40-42", startDate: .now.addingTimeInterval(90000))
     ]
     
     func fetchUserInterests() -> [Interest] {
@@ -39,7 +39,7 @@ class StubDataStore: AnyDataStore {
     
     func delete(_ event: Event) { }
     
-    static private func eventEntity(name: String, interest: Interest, descLength: Int, location: String, date: Date?) -> Event {
+    static private func eventEntity(name: String, interest: Interest, descLength: Int, location: String, startDate: Date) -> Event {
         return Event(
             id: UUID().uuidString,
             name: name,
@@ -48,11 +48,11 @@ class StubDataStore: AnyDataStore {
             interest: interest,
             coordinates: nil,
             locationName: location,
-            date: date,
+            startDate: startDate,
+            endDate: startDate.adding(hours: 3),
             isPublic: true,
             withApproval: false,
             creator: .dev,
-            createdAt: .now,
             userStatus: .owner
         )
     }

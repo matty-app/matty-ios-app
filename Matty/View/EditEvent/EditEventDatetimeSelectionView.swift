@@ -8,7 +8,7 @@ struct EditEventDatetimeSelectionView: View {
         Form {
             Toggle("Now", isOn: $editEvent.now)
             if !editEvent.now {
-                DatePicker("Specific", selection: $editEvent.date)
+                DatePicker("Specific", selection: $editEvent.startDate)
             }
         }.navigationTitle("Date & Time")
     }

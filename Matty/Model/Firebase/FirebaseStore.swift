@@ -108,11 +108,11 @@ class FirebaseStore: AnyDataStore {
             "interestRef": ref(event.interest),
             "coordinates": event.coordinates?.toGeoPoint() ?? NSNull(),
             "locationName": event.locationName,
-            "date": event.date ?? NSNull(),
+            "startDate": event.startDate,
+            "endDate": event.endDate,
             "public": event.isPublic,
             "withApproval": event.withApproval,
             "creatorRef": userRef,
-            "createdAt": Date.now,
             "participants": [userRef]
         ], forDocument: eventRef)
         
@@ -163,7 +163,8 @@ class FirebaseStore: AnyDataStore {
             "interestRef": ref(event.interest),
             "coordinates": coordinates,
             "locationName": event.locationName,
-            "date": event.date ?? NSNull(),
+            "startDate": event.startDate,
+            "endDate": event.endDate,
             "public": event.isPublic,
             "withApproval": event.withApproval,
         ])

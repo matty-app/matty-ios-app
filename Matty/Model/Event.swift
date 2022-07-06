@@ -9,18 +9,22 @@ struct Event: Hashable, Identifiable {
     let interest: Interest
     let coordinates: CLLocationCoordinate2D?
     let locationName: String
-    let date: Date?
+    let startDate: Date
+    let endDate: Date
     let isPublic: Bool
     let withApproval: Bool
     let creator: User
-    let createdAt: Date
     var userStatus: UserStatus
 }
 
 extension Event {
     
     var past: Bool {
-        return (date ?? .now) < .now
+        return endDate < .now
+    }
+    
+    var started: Bool {
+        return startDate < .now
     }
     
     enum UserStatus {

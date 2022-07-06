@@ -11,11 +11,11 @@ extension FirebaseStore {
         let interestRef: DocumentReference
         let coordinates: GeoPoint?
         let locationName: String
-        let date: Date?
+        let startDate: Date
+        let endDate: Date
         let `public`: Bool
         let withApproval: Bool
         let creatorRef: DocumentReference
-        let createdAt: Date
         let participants: [DocumentReference]
     }
 }
@@ -53,11 +53,11 @@ extension FirebaseStore.EventEntity {
             interest: interest,
             coordinates: .from(coordinates),
             locationName: locationName,
-            date: date,
+            startDate: startDate,
+            endDate: endDate,
             isPublic: `public`,
             withApproval: withApproval,
             creator: creator,
-            createdAt: createdAt,
             userStatus: userStatus
         )
     }

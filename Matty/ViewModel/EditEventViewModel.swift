@@ -10,7 +10,7 @@ class EditEventViewModel: ObservableObject {
     @Published var interest = ""
     @Published var locationName = ""
     @Published var locationCoordinate: CLLocationCoordinate2D?
-    @Published var date = Date.now
+    @Published var startDate = Date.now
     @Published var now = true
     @Published var isPublic = true
     @Published var approvalRequired = true
@@ -26,7 +26,7 @@ class EditEventViewModel: ObservableObject {
     }
     
     var datetime: String {
-        return now ? "Now" : date.formatted()
+        return now ? "Now" : startDate.formatted()
     }
     
     var noAvailableInterests: Bool {
@@ -44,8 +44,8 @@ class EditEventViewModel: ObservableObject {
             interest = event.interest.name
             locationName = event.locationName
             locationCoordinate = event.coordinates
-            if let date = event.date {
-                self.date = date
+            if !event.started {
+                startDate = event.startDate
                 now = false
             }
             isPublic = event.isPublic
@@ -86,6 +86,7 @@ class EditEventViewModel: ObservableObject {
     }
     
     func toEvent() -> Event {
+        let startDate = now ? Date.now : startDate
         return Event(
             id: event?.id ?? "",
             name: name,
@@ -94,11 +95,11 @@ class EditEventViewModel: ObservableObject {
             interest: selectedInterest!,
             coordinates: locationCoordinate,
             locationName: locationName,
-            date: now ? nil : date,
+            startDate: startDate,
+            endDate: startDate.adding(hours: 3),
             isPublic: isPublic,
             withApproval: approvalRequired,
             creator: .dev,
-            createdAt: event?.createdAt ?? .now,
             userStatus: .owner
         )
     }

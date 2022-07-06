@@ -21,4 +21,8 @@ extension Date {
     var secondsFromNow: Int {
         return Calendar.current.dateComponents([.second], from: .now, to: self).second ?? 0
     }
+    
+    func adding(hours: Int) -> Date {
+        return Calendar.current.date(byAdding: .hour, value: hours, to: self) ?? self
+    }
 }
