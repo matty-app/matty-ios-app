@@ -106,8 +106,11 @@ class FirebaseStore: AnyDataStore {
             "description": event.description,
             "details": event.details,
             "interestRef": ref(event.interest),
-            "coordinates": event.coordinates?.toGeoPoint() ?? NSNull(),
-            "locationName": event.locationName,
+            "location": [
+                "name": event.location.name,
+                "address": event.location.address,
+                "coordinates": event.location.coordinates?.toGeoPoint() ?? NSNull()
+            ],
             "startDate": event.startDate,
             "endDate": event.endDate,
             "public": event.isPublic,
@@ -155,14 +158,17 @@ class FirebaseStore: AnyDataStore {
     
     func update(_ event: Event) {
         let eventRef = ref(event)
-        let coordinates = event.coordinates?.toGeoPoint() ?? NSNull()
+        let coordinates = event.location.coordinates?.toGeoPoint() ?? NSNull()
         eventRef.updateData([
             "name": event.name,
             "description": event.description,
             "details": event.details,
             "interestRef": ref(event.interest),
-            "coordinates": coordinates,
-            "locationName": event.locationName,
+            "location": [
+                "name": event.location.name,
+                "address": event.location.address,
+                "coordinates": coordinates
+            ],
             "startDate": event.startDate,
             "endDate": event.endDate,
             "public": event.isPublic,

@@ -7,8 +7,7 @@ struct Event: Hashable, Identifiable {
     let description: String
     let details: String
     let interest: Interest
-    let coordinates: CLLocationCoordinate2D?
-    let locationName: String
+    let location: Location
     let startDate: Date
     let endDate: Date
     let isPublic: Bool
@@ -18,6 +17,12 @@ struct Event: Hashable, Identifiable {
 }
 
 extension Event {
+    
+    struct Location: Hashable {
+        let name: String
+        let address: String
+        let coordinates: CLLocationCoordinate2D?
+    }
     
     var past: Bool {
         return endDate < .now

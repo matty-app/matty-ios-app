@@ -102,9 +102,11 @@ class EventFeedViewModel: ObservableObject {
         Task {
             let events = await dataStore.fetchUserEvents()
             userEvents = events.sorted { $0.startDate < $1.startDate }
-            while userEvents.first?.past ?? false {
-                let pastEvent = userEvents.removeFirst()
-                userEvents.append(pastEvent)
+            if let lastEvent = userEvents.last, !lastEvent.past {
+                while userEvents.first?.past ?? false {
+                    let pastEvent = userEvents.removeFirst()
+                    userEvents.append(pastEvent)
+                }
             }
         }
     }

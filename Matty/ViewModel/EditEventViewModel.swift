@@ -42,8 +42,8 @@ class EditEventViewModel: ObservableObject {
             description = event.description
             privateDetails = event.details
             interest = event.interest.name
-            locationName = event.locationName
-            locationCoordinate = event.coordinates
+            locationName = event.location.name
+            locationCoordinate = event.location.coordinates
             if !event.started {
                 startDate = event.startDate
                 now = false
@@ -93,8 +93,7 @@ class EditEventViewModel: ObservableObject {
             description: description,
             details: privateDetails,
             interest: selectedInterest!,
-            coordinates: locationCoordinate,
-            locationName: locationName,
+            location: .init(name: locationName, address: "", coordinates: locationCoordinate),
             startDate: startDate,
             endDate: startDate.adding(hours: 3),
             isPublic: isPublic,

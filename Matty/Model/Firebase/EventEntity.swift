@@ -9,8 +9,7 @@ extension FirebaseStore {
         let description: String
         let details: String
         let interestRef: DocumentReference
-        let coordinates: GeoPoint?
-        let locationName: String
+        let location: Location
         let startDate: Date
         let endDate: Date
         let `public`: Bool
@@ -21,6 +20,12 @@ extension FirebaseStore {
 }
 
 extension FirebaseStore.EventEntity {
+    
+    struct Location: Decodable, Equatable {
+        let name: String
+        let address: String
+        let coordinates: GeoPoint?
+    }
     
     //TODO: Get current user
     private var userRef: DocumentReference {
@@ -51,8 +56,11 @@ extension FirebaseStore.EventEntity {
             description: description,
             details: details,
             interest: interest,
-            coordinates: .from(coordinates),
-            locationName: locationName,
+            location: .init(
+                name: location.name,
+                address: location.address,
+                coordinates: .from(location.coordinates)
+            ),
             startDate: startDate,
             endDate: endDate,
             isPublic: `public`,

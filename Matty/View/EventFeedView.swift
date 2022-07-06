@@ -96,7 +96,7 @@ fileprivate struct EventDetails: View {
                 }
                 Section("DESCRIPTION", value: event.description)
                 Section("DETAILS", value: event.details)
-                Section("LOCATION", value: event.locationName)
+                Section("LOCATION", value: event.location.name)
                 Section("DATE & TIME", value: event.formattedDatetime)
             }
             .padding()

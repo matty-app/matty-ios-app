@@ -209,7 +209,7 @@ struct EventCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 1)
                 HStack(alignment: .top) {
-                    Text(event.locationName)
+                    Text(event.location.name)
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .underline()
