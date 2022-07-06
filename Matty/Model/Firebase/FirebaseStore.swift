@@ -32,7 +32,10 @@ class FirebaseStore: AnyDataStore {
     }
     
     func fetchUserInterests() async -> [Interest] {
-        return StubDataStore().fetchUserInterests()
+        if let user = await fetchUser()?.unwrap() {
+            return user.interests
+        }
+        return []
     }
     
     func fetchAllInterests() async -> [Interest] {
