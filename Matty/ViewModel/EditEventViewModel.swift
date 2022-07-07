@@ -8,8 +8,7 @@ class EditEventViewModel: ObservableObject {
     @Published var description = ""
     @Published var privateDetails = ""
     @Published var interest = ""
-    @Published var locationName = ""
-    @Published var locationCoordinate: CLLocationCoordinate2D?
+    @Published var location = Location()
     @Published var startDate = Date.now
     @Published var now = true
     @Published var isPublic = true
@@ -42,17 +41,20 @@ class EditEventViewModel: ObservableObject {
             description = event.description
             privateDetails = event.details
             interest = event.interest.name
-            locationName = event.location.name
-            locationCoordinate = event.location.coordinates
+            location = Location(
+                name: event.location.name,
+                address: event.location.address,
+                coordinates: event.location.coordinates
+            )
             if !event.started {
                 startDate = event.startDate
                 now = false
             }
             isPublic = event.isPublic
             approvalRequired = event.withApproval
-            self.isNew = false
+            isNew = false
         } else {
-            self.isNew = true
+            isNew = true
         }
         self.dataStore = dataStore
         Task {
@@ -93,7 +95,7 @@ class EditEventViewModel: ObservableObject {
             description: description,
             details: privateDetails,
             interest: selectedInterest!,
-            location: .init(name: locationName, address: "", coordinates: locationCoordinate),
+            location: .init(name: location.name, address: location.address, coordinates: location.coordinates),
             startDate: startDate,
             endDate: startDate.adding(hours: 3),
             isPublic: isPublic,
@@ -101,5 +103,14 @@ class EditEventViewModel: ObservableObject {
             creator: .dev,
             userStatus: .owner
         )
+    }
+}
+
+extension EditEventViewModel {
+    
+    struct Location {
+        var name: String = ""
+        var address: String = ""
+        var coordinates: CLLocationCoordinate2D?
     }
 }

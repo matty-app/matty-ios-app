@@ -7,11 +7,12 @@ struct EditEventLocationSelectionView: View {
     
     @ObservedObject private var mapSearchService: MapSearchService
     @State private var address = ""
+    @State private var locationName = ""
     @State private var searchText = ""
     @State private var searchResults: [MKMapItem] = []
     @State private var region: MKCoordinateRegion
     
-    typealias CompletionHandler = (String, CLLocationCoordinate2D) -> ()
+    typealias CompletionHandler = (String, String, CLLocationCoordinate2D) -> ()
     
     private var locationManager = CLLocationManager()
     private var geocoder = CLGeocoder()
@@ -38,7 +39,7 @@ struct EditEventLocationSelectionView: View {
             MapView()
             MapPin()
             VStack {
-                Address()
+                LocationTitle()
                 Spacer()
                 HStack {
                     BackButton()
@@ -61,13 +62,14 @@ struct EditEventLocationSelectionView: View {
             showsUserLocation: true
         )
         .onChange(of: region) { newValue in
-            address = ""
+            locationName = ""
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 if newValue == region {
                     let location = CLLocation.from(region)
                     geocoder.reverseGeocodeLocation(location) { placemarks, error in
                         if let placemark = placemarks?.first {
-                            address = placemark.shortAddress
+                            locationName = placemark.shortAddress
+                            address = placemark.address
                         }
                     }
                 }
@@ -88,9 +90,9 @@ struct EditEventLocationSelectionView: View {
         }
     }
     
-    private func Address() -> some View {
+    private func LocationTitle() -> some View {
         HStack {
-            Text(address)
+            Text(locationName)
                 .font(.headline)
                 .foregroundColor(.black)
         }
@@ -145,7 +147,7 @@ struct EditEventLocationSelectionView: View {
                 }
             }
             Button("Submit") {
-                completionHandler(address, region.center)
+                completionHandler(locationName, address, region.center)
                 dismissView()
             }
         }
@@ -188,7 +190,7 @@ struct EditEventLocationSelectionView: View {
 struct EditEventLocationSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            EditEventLocationSelectionView { _, _ in }
+            EditEventLocationSelectionView { _, _, _ in }
         }
     }
 }

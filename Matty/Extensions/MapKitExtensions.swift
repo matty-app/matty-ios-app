@@ -44,6 +44,10 @@ extension MKCoordinateRegion {
 
 extension CLPlacemark {
     
+    var address: String {
+        [country, locality, subLocality, thoroughfare, subThoroughfare].compactMap { $0 }.joined(separator: ", ")
+    }
+    
     var shortAddress: String {
         [name, locality].compactMap { $0 }.joined(separator: ", ")
     }

@@ -30,10 +30,11 @@ struct EditEventView: View {
                 Picker(name: "Interest", icon: "tag", value: editEvent.interest) {
                     EditEventInterestSelectionView()
                 }
-                Picker(name: "Location", icon: "location", value: editEvent.locationName) {
-                    EditEventLocationSelectionView { locationName, locationCoordinate in
-                        editEvent.locationName = locationName
-                        editEvent.locationCoordinate = locationCoordinate
+                Picker(name: "Location", icon: "location", value: editEvent.location.name) {
+                    EditEventLocationSelectionView { name, address, coordinates in
+                        editEvent.location.name = name
+                        editEvent.location.address = address
+                        editEvent.location.coordinates = coordinates
                     }
                 }
                 Picker(name: "Date & Time", icon: "calendar", value: editEvent.datetime) {
