@@ -31,7 +31,8 @@ struct EditEventView: View {
                     EditEventInterestSelectionView()
                 }
                 Picker(name: "Location", icon: "location", value: editEvent.location.name) {
-                    EditEventLocationSelectionView { name, address, coordinates in
+                    let coordinates = editEvent.location.coordinates
+                    EditEventLocationSelectionView(coordinates: coordinates) { name, address, coordinates in
                         editEvent.location.name = name
                         editEvent.location.address = address
                         editEvent.location.coordinates = coordinates

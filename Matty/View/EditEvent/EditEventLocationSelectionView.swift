@@ -18,16 +18,14 @@ struct EditEventLocationSelectionView: View {
     private var geocoder = CLGeocoder()
     private var completionHandler: CompletionHandler
     
-    init(completionHandler: @escaping CompletionHandler) {
+    init(coordinates: CLLocationCoordinate2D? = nil, completionHandler: @escaping CompletionHandler) {
+        var center = CLLocationCoordinate2D(latitude: 55.7558, longitude: 37.6173)
+        if let coordinates = coordinates {
+            center = coordinates
+        }
         let region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(
-                latitude: 55.7558,
-                longitude: 37.6173
-            ),
-            span: MKCoordinateSpan(
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1
-            )
+            center: center,
+            span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
         )
         _region = State(initialValue: region)
         self.mapSearchService = MapSearchService(region: region)
