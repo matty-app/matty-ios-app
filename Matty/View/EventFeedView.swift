@@ -148,7 +148,7 @@ fileprivate struct EventDetails: View {
                 .font(.headline)
                 .padding()
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .background(.green)
+                .background(.blue)
                 .foregroundColor(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
