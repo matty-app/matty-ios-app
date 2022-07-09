@@ -10,6 +10,7 @@ class EditEventViewModel: ObservableObject {
     @Published var interest = ""
     @Published var location = Location()
     @Published var startDate = Date.now
+    @Published var endDate = Date.now.adding(hours: 1)
     @Published var now = true
     @Published var isPublic = true
     @Published var approvalRequired = true
@@ -35,6 +36,7 @@ class EditEventViewModel: ObservableObject {
     private let dataStore: AnyDataStore
     
     init(_ event: Event? = nil, dataStore: AnyDataStore = FirebaseStore.shared) {
+        self.dataStore = dataStore
         self.event = event
         if let event = event {
             name = event.name
@@ -50,13 +52,15 @@ class EditEventViewModel: ObservableObject {
                 startDate = event.startDate
                 now = false
             }
+            endDate = event.endDate
             isPublic = event.isPublic
             approvalRequired = event.withApproval
             isNew = false
         } else {
             isNew = true
+            startDate = EditEventViewModel.suggestedStartDate
+            endDate = EditEventViewModel.suggestedEndDate
         }
-        self.dataStore = dataStore
         Task {
             availableInterests = await dataStore.fetchAllInterests()
         }
@@ -97,7 +101,7 @@ class EditEventViewModel: ObservableObject {
             interest: selectedInterest!,
             location: .init(name: location.name, address: location.address, coordinates: location.coordinates),
             startDate: startDate,
-            endDate: startDate.adding(hours: 3),
+            endDate: endDate,
             isPublic: isPublic,
             withApproval: approvalRequired,
             creator: .dev,
@@ -112,5 +116,17 @@ extension EditEventViewModel {
         var name: String = ""
         var address: String = ""
         var coordinates: CLLocationCoordinate2D?
+    }
+    
+    static var suggestedStartDate: Date {
+        var startDate = Date.now.adding(hours: 1).roundedToHours()
+        if startDate.minutesFromNow < 30 {
+            startDate = startDate.adding(hours: 1)
+        }
+        return startDate
+    }
+    
+    static var suggestedEndDate: Date {
+        return suggestedStartDate.adding(hours: 1)
     }
 }

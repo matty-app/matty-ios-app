@@ -25,4 +25,13 @@ extension Date {
     func adding(hours: Int) -> Date {
         return Calendar.current.date(byAdding: .hour, value: hours, to: self) ?? self
     }
+    
+    func adding(minutes: Int) -> Date {
+        return Calendar.current.date(byAdding: .minute, value: minutes, to: self) ?? self
+    }
+    
+    func roundedToHours() -> Date {
+        let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour], from: self)
+        return Calendar.current.date(from: dateComponents) ?? self
+    }
 }

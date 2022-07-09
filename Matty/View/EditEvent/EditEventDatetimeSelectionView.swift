@@ -6,10 +6,11 @@ struct EditEventDatetimeSelectionView: View {
     
     var body: some View {
         Form {
-            Toggle("Now", isOn: $editEvent.now)
+            Toggle("Starts Now", isOn: $editEvent.now)
             if !editEvent.now {
-                DatePicker("Specific", selection: $editEvent.startDate)
+                DatePicker("Starts At", selection: $editEvent.startDate, in: Date.now...)
             }
+            DatePicker("Ends At", selection: $editEvent.endDate, in: editEvent.startDate.adding(minutes: 1)...)
         }.navigationTitle("Date & Time")
     }
 }
