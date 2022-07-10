@@ -93,6 +93,10 @@ class EditEventViewModel: ObservableObject {
     
     func toEvent() -> Event {
         let startDate = now ? Date.now : startDate
+        var participants = [User.dev]
+        if let event = event {
+            participants = event.participants
+        }
         return Event(
             id: event?.id ?? "",
             name: name,
@@ -105,7 +109,8 @@ class EditEventViewModel: ObservableObject {
             isPublic: isPublic,
             withApproval: approvalRequired,
             creator: .dev,
-            userStatus: .owner
+            userStatus: .owner,
+            participants: participants
         )
     }
 }

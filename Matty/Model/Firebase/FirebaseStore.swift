@@ -265,7 +265,19 @@ extension FirebaseStore {
 extension Firestore {
     
     func collection(_ collection: FirebaseStore.Collection) -> CollectionReference {
-        self.collection(collection.rawValue)
+        return self.collection(collection.rawValue)
+    }
+    
+    func ref(_ interest: Interest) -> DocumentReference {
+        return collection(.interests).document(interest.id)
+    }
+    
+    func ref(_ user: User) -> DocumentReference {
+        return collection(.users).document(user.id)
+    }
+    
+    func refs(_ users: [User]) -> [DocumentReference] {
+        return users.map { ref($0) }
     }
 }
 

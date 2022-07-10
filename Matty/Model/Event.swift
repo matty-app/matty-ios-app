@@ -14,6 +14,7 @@ struct Event: Hashable, Identifiable {
     let withApproval: Bool
     let creator: User
     var userStatus: UserStatus
+    var participants: [User]
 }
 
 extension Event {

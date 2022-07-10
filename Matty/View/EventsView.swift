@@ -82,8 +82,12 @@ extension Event {
         return startDate.formatted(date: .abbreviated, time: .omitted)
     }
     
-    var formattedDatetime: String {
+    var formattedStartDatetime: String {
         return startDate.formatted()
+    }
+    
+    var formattedEndDatetime: String {
+        return endDate.formatted()
     }
 }
 

@@ -52,7 +52,8 @@ class StubDataStore: AnyDataStore {
             isPublic: true,
             withApproval: false,
             creator: .dev,
-            userStatus: .owner
+            userStatus: .owner,
+            participants: [.dev]
         )
     }
 }

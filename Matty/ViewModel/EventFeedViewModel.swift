@@ -81,6 +81,8 @@ class EventFeedViewModel: ObservableObject {
             self.selectedEvent?.userStatus = .participant
             userEvents.append(self.selectedEvent!)
             relevantEvents = relevantEvents.filter { $0 != selectedEvent }
+            //TODO: Append current user
+            self.selectedEvent?.participants.append(.dev)
         }
     }
     
@@ -89,6 +91,9 @@ class EventFeedViewModel: ObservableObject {
             dataStore.leave(selectedEvent)
             self.selectedEvent?.userStatus = .none
             userEvents = userEvents.filter { $0 != selectedEvent }
+            //TODO: Filter current user
+            let participants = selectedEvent.participants.filter { $0.id != User.dev.id }
+            self.selectedEvent?.participants = participants
         }
     }
     
