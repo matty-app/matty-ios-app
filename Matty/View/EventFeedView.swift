@@ -99,7 +99,7 @@ fileprivate struct EventDetails: View {
                 Section("LOCATION", value: event.location.name)
                 Section("STARTS AT", value: event.formattedStartDatetime)
                 Section("ENDS AT", value: event.formattedEndDatetime)
-                Section("PARTICIPANTS", value: "\(event.participants.count)")
+                Participants()
             }
             .padding()
             Spacer()
@@ -117,14 +117,42 @@ fileprivate struct EventDetails: View {
         }
     }
     
+    func Header(_ title: String) -> some View {
+        Text(title)
+            .font(.subheadline)
+            .foregroundColor(.gray)
+            .padding(.top)
+    }
+    
     func Section(_ header: String, value: String) -> some View {
         Group {
-            Text(header)
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                .padding(.top)
+            Header(header)
             Text(value)
                 .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    func Participants() -> some View {
+        Group {
+            Header("PARTICIPANTS")
+            HStack {
+                HStack(spacing: -25) {
+                    ForEach(0..<3) { index in
+                        if index < event.participants.count {
+                            Image(systemName: "person.crop.circle.fill")
+                                .font(.system(size: 40))
+                                .background(.white)
+                                .clipShape(Circle())
+                                .zIndex(Double(event.participants.count - index))
+                        }
+                    }
+                }
+                if event.participants.count > 3 {
+                    Text("+\(event.participants.count - 3)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+            }
         }
     }
     

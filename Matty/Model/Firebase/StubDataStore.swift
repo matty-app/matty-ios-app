@@ -53,9 +53,17 @@ class StubDataStore: AnyDataStore {
             withApproval: false,
             creator: .dev,
             userStatus: .owner,
-            participants: [.dev]
+            participants: [.user1, .user2, .user3, .user4, .user5]
         )
     }
+}
+
+extension User {
+    fileprivate static let user1 = User(id: "user1", name: "User 1", email: "user1@matty.com", interests: [])
+    fileprivate static let user2 = User(id: "user2", name: "User 2", email: "user2@matty.com", interests: [])
+    fileprivate static let user3 = User(id: "user3", name: "User 3", email: "user3@matty.com", interests: [])
+    fileprivate static let user4 = User(id: "user4", name: "User 4", email: "user4@matty.com", interests: [])
+    fileprivate static let user5 = User(id: "user5", name: "User 5", email: "user5@matty.com", interests: [])
 }
 
 extension Array where Element == String {
